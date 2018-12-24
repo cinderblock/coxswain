@@ -57,7 +57,13 @@ function eventHandler(name: string, log = true) {
   if (eventHandlers[name]) return eventHandlers[name];
 
   return (eventHandlers[name] = (value: any) => {
-    if (typeof value != 'number' && typeof value != 'string' && value) {
+    if (
+      typeof value != 'number' &&
+      typeof value != 'string' &&
+      value &&
+      value.target &&
+      value.target.value !== undefined
+    ) {
       value = value.target.value;
     }
 
