@@ -7,13 +7,13 @@ chalk.enabled = true;
 // Look like up to level 3 (256 color support) works
 chalk.level = chalk.level || 3;
 
-function variable() {
-  console.log.apply(console, [...arguments].map((val, i) => (i ? chalk.blue : chalk.cyan)(val)));
+function variable(...args: any[]) {
+  console.log(...args.map((val, i) => (i ? chalk.blue : chalk.cyan)(val)));
 }
 
-function makeChalkLog(color) {
-  return function() {
-    console.log.apply(console, [...arguments].map(val => color(val)));
+function makeChalkLog(color: Function) {
+  return function(...args: any[]) {
+    console.log(...args.map((val: any) => color(val)));
   };
 }
 
@@ -23,7 +23,7 @@ const yellow = makeChalkLog(chalk.yellow);
 const magenta = makeChalkLog(chalk.magenta);
 const grey = makeChalkLog(chalk.grey);
 
-module.exports = {
+export default {
   log: console.log,
   variable,
   green,

@@ -5,7 +5,7 @@ import SocketIO from 'socket.io';
 
 let clientID = 0;
 
-module.exports = function setupClientSocket(server: http.Server, eventHandlers: { [x: string]: Function }) {
+export default function setupClientSocket(server: http.Server, eventHandlers: { [x: string]: Function }) {
   // Helper function that is run every time a new webUI connects to us
   function setupClientSocket(sock: SocketIO.Socket) {
     const ID = clientID++;
@@ -58,4 +58,4 @@ module.exports = function setupClientSocket(server: http.Server, eventHandlers: 
   }, 1000 / 30); // at 30 Hz
 
   return sock;
-};
+}

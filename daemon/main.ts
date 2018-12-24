@@ -6,10 +6,11 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 import http from 'http';
 import chalk from 'chalk';
 
-// Local dependencies
-const debug = require('./utils/debug.js');
-const makeClientHandler = require('./ClientUIHandler.ts');
 const ServerStarter = require('server-starter');
+
+// Local dependencies
+import debug from './utils/debug';
+import makeClientHandler from './ClientUIHandler';
 
 import tunnel from './TunnelHandler';
 
