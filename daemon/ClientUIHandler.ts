@@ -56,12 +56,12 @@ export default function makeSocketIOServer(
   // When a new client connects, setup handlers for the possible incoming commands
   sock.on('connection', setupClientSocket);
 
-  // Send regular updates to UI
-  setInterval(() => {
-    sock.volatile.emit('update', {
-      /* data */
-    });
-  }, 1000 / 30); // at 30 Hz
+  // // Send regular updates to UI
+  // setInterval(() => {
+  //   sock.volatile.emit('update', {
+  //     /* data */
+  //   });
+  // }, 1000 / 30); // at 30 Hz
 
   return sock;
 }
