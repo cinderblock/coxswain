@@ -6,6 +6,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 // import reactAutoBind from 'react-autobind';
 
 import SocketConnection, { notify } from './SocketConnection';
+import Authentication from './Authentication';
 
 export default function AppContainer(props: any) {
   const [authorized, setAuthorized] = useState<undefined | boolean>(undefined);
@@ -17,7 +18,7 @@ export default function AppContainer(props: any) {
   }
 
   if (authorized === false) {
-    return <>Get your token buddy...</>;
+    return <Authentication />;
   }
 
   return <>Authorized!</>;
