@@ -4,9 +4,19 @@ Daemon to handle deployments from push events.
 
 ## Usage
 
-WIP/TBD
+#### Planned
+
+- Run daemon on target machine
+- Connect to Daemon via web UI
+- Give daemon github oauth token
+- Select Repository & branch to deploy
+- Select deploy folder on target
+- Run deploy scripts?
 
 ## Development
+
+This is very hacky at the moment.
+Just trying to get to a proof of concept quickly and will clean it up later.
 
 ### Prerequisites
 
