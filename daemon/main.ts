@@ -125,6 +125,8 @@ async function main() {
   const list = await gh.getRepositoryList();
 
   debug.info('Loaded repos:', list.length);
+
+  remoteControlServer.emitAll('repositories', list);
 }
 
 debug.green('Hello, world.');
