@@ -16,10 +16,13 @@ import tunnel from './TunnelHandler';
 const clientServer = http.createServer();
 const hookServer = http.createServer();
 
+const clientServerListen = 8000;
+const hookServerListen = 8001;
+
 ServerStarter(
   clientServer,
   {
-    listen: 8000,
+    listen: clientServerListen,
     // listen: '/tmp/daemon.sock',
     // socketMode: 0o777,
     // socketOwner: {
@@ -39,7 +42,7 @@ ServerStarter(
 ServerStarter(
   hookServer,
   {
-    listen: 8001,
+    listen: hookServerListen,
     // listen: '/tmp/daemon.sock',
     // socketMode: 0o777,
     // socketOwner: {
@@ -57,7 +60,7 @@ ServerStarter(
 );
 
 (async function() {
-  console.log('URL:', await tunnel(8001).url());
+  console.log('URL:', await tunnel(hookServerListen).url());
 })();
 
 // Events from the clients and how to handle them
