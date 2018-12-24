@@ -33,7 +33,7 @@ document.addEventListener(
       return;
     }
 
-    console.log('No handler for:', event);
+    // console.log('No handler for:', event);
   },
   false
 );
