@@ -6,7 +6,9 @@ import scopes from './assets/Github-Scopes.png';
 
 export default function Authentication(props: any) {
   function handleNewToken(event: any) {
-    console.log('New Token:', event);
+    if (!(event.target.value as string).match(/^[0-9a-f]{40}$/)) return;
+
+    eventHandler('token')(event.target.value);
   }
 
   return (
