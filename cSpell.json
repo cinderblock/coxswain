@@ -4,6 +4,7 @@
     "words": [
         "autobind",
         "cinderblock",
+        "devtool",
         "favicons",
         "postpublish",
         "postversion",
@@ -14,7 +15,8 @@
         "shallowequal",
         "tacklind",
         "timeago",
-        "ui"
+        "ui",
+        "webpacked"
     ],
     "flagWords": []
 }
