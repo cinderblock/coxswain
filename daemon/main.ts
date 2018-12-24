@@ -14,6 +14,7 @@ const ServerStarter = require('server-starter');
 import tunnel from './TunnelHandler';
 
 const clientServer = http.createServer();
+const hookServer = http.createServer();
 
 ServerStarter(
   clientServer,
@@ -35,8 +36,28 @@ ServerStarter(
   }
 );
 
+ServerStarter(
+  hookServer,
+  {
+    listen: 8001,
+    // listen: '/tmp/daemon.sock',
+    // socketMode: 0o777,
+    // socketOwner: {
+    //   //user: 'pi',
+    //   group: 'www-data',
+    // },
+  },
+  (err?: Error, info?: string, extra?: string) => {
+    if (err) {
+      console.log(chalk.red('Hook server error:'), err, info, extra);
+    } else {
+      // console.log('Listening:', info);
+    }
+  }
+);
+
 (async function() {
-  console.log('URL:', await tunnel(9002).url());
+  console.log('URL:', await tunnel(8001).url());
 })();
 
 // Events from the clients and how to handle them
