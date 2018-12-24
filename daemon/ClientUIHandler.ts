@@ -5,7 +5,11 @@ import SocketIO from 'socket.io';
 
 let clientID = 0;
 
-export default function setupClientSocket(server: http.Server, eventHandlers: { [x: string]: Function }) {
+export default function makeSocketIOServer(
+  server: http.Server,
+  eventHandlers: { [x: string]: Function },
+  onNewClient?: Function
+) {
   // Helper function that is run every time a new webUI connects to us
   function setupClientSocket(sock: SocketIO.Socket) {
     const ID = clientID++;
@@ -39,6 +43,8 @@ export default function setupClientSocket(server: http.Server, eventHandlers: { 
         handler(value, ID);
       });
     }, 200);
+
+    if (onNewClient) onNewClient(sock);
   }
 
   const sock = SocketIO(server, {
