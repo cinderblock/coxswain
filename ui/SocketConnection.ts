@@ -9,9 +9,41 @@ const socket = io(socketURL, {
 
 socket.on('error', console.log.bind(0, 'Error:'));
 
-const Store: { startuptime?: number } = {};
+type Stored<T> = { setState?: React.Dispatch<React.SetStateAction<T>>; value?: T };
 
-socket.on('startuptime', (u: number) => (Store.startuptime = u));
+const Store: { [x: string]: Stored<any> } = {};
+
+function updateStore(index: string, value: any) {
+  if (!Store[index]) Store[index] = { value };
+  else Store[index].value = value;
+
+  const setState = Store[index].setState;
+  if (setState) setState(value);
+}
+
+function linkStore(index: string) {
+  socket.on(index, (u: any) => updateStore(index, u));
+}
+
+linkStore('startuptime');
+
+socket.on('noauth', () => {
+  updateStore('authorized', false);
+});
+
+function notify(index: string, setState: React.Dispatch<React.SetStateAction<any>>) {
+  return function() {
+    if (!Store[index]) Store[index] = { setState };
+    else {
+      Store[index].setState = setState;
+      setState(Store[index].value);
+    }
+
+    return function denotify() {
+      Store[index].setState = undefined;
+    };
+  };
+}
 
 window.addEventListener('deviceorientation', ({ alpha, beta, gamma }) => {
   if (alpha === null) return;
@@ -40,4 +72,4 @@ function eventHandler(name: string, log = true) {
   });
 }
 
-export { socket as default, eventHandler, Store };
+export { socket as default, eventHandler, Store, notify };
