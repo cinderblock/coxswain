@@ -1,6 +1,6 @@
-# Node Server UI base
+# Coxswain
 
-Skeleton for a sever/client JavaScript pair.
+Daemon to handle deployments from push events.
 
 ## Development
 
