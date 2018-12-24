@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import http from 'http';
-import * as os from 'os';
+import os from 'os';
 import SocketIO from 'socket.io';
 
 const ServerStarter = require('server-starter');
