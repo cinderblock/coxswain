@@ -118,6 +118,10 @@ function Shutdown() {
   });
 }
 
+async function updateRepo(repo: Repository) {
+  // console.log('URL:', await tunnel(hookServerListen).url());
+}
+
 async function main() {
   const token = Token.get();
 
@@ -126,9 +130,8 @@ async function main() {
     return;
   }
 
-  // console.log('URL:', await tunnel(hookServerListen).url());
-
   remoteControlServer.emitAll('authorized', true);
+
   gh = github(token);
 
   repos = await gh.getRepositoryList();
