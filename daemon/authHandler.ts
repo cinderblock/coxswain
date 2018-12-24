@@ -5,9 +5,12 @@ const authFile = 'auth.txt';
 
 export default function auth() {
   let saved: string | undefined;
-
-  fs.readFile(authFile, (err, buff) => {
-    if (!err) saved = buff.toString();
+  let loaded = new Promise(resolve => {
+    fs.readFile(authFile, (err, buff) => {
+      if (err) return resolve(false);
+      saved = buff.toString();
+      resolve(true);
+    });
   });
 
   function get() {
@@ -22,5 +25,6 @@ export default function auth() {
   return {
     get,
     save,
+    loaded,
   };
 }

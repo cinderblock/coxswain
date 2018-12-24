@@ -126,4 +126,4 @@ async function main() {
 
 debug.green('Hello, world.');
 
-main();
+Token.loaded.then(() => main());
