@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 // config
-const socketURL = undefined;
+const socketURL = (undefined as unknown) as string;
 
 const socket = io(socketURL, {
   transports: ['websocket'],
@@ -9,9 +9,9 @@ const socket = io(socketURL, {
 
 socket.on('error', console.log.bind(0, 'Error:'));
 
-const Store = {};
+const Store: { startuptime?: number } = {};
 
-socket.on('startuptime', u => (Store.startuptime = u));
+socket.on('startuptime', (u: number) => (Store.startuptime = u));
 
 window.addEventListener('deviceorientation', ({ alpha, beta, gamma }) => {
   if (alpha === null) return;
@@ -19,13 +19,13 @@ window.addEventListener('deviceorientation', ({ alpha, beta, gamma }) => {
   socket.emit('event', { name: 'deviceorientation', value: { alpha, beta, gamma } });
 });
 
-const eventHandlers = {};
+const eventHandlers: { [x: string]: Function } = {};
 
 // caches event handlers
-function eventHandler(name, log = true) {
+function eventHandler(name: string, log = true) {
   if (eventHandlers[name]) return eventHandlers[name];
 
-  return (eventHandlers[name] = value => {
+  return (eventHandlers[name] = (value: any) => {
     if (typeof value != 'number' && typeof value != 'string' && value) {
       value = value.target.value;
     }

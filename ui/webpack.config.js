@@ -7,10 +7,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
+const os = require('os');
+
 module.exports = {
   entry: [
     // 'webpack-hot-middleware/client',
-    './main.jsx',
+    './main.tsx',
   ],
   output: {
     filename: 'bundle.js',
@@ -18,15 +20,19 @@ module.exports = {
     publicPath: '/',
   },
   mode: 'development',
+  devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'My Webpacked App',
+      title: 'Coxswain on ' + os.hostname(),
       meta: { viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no' },
     }),
     new FaviconsWebpackPlugin('./assets/icons8-dinghy-filled-50.png'),
     new ErrorOverlayPlugin(),
     // new webpack.HotModuleReplacementPlugin(),
   ],
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
   devServer: {
     port: 9000,
     host: '0.0.0.0',
@@ -69,12 +75,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['@babel/env', '@babel/react'],
-        },
       },
       {
         test: /\.less$/,
