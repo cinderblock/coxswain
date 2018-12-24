@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Daemon to handle deployments from push events",
   "scripts": {
-    "install": "install-vscode-extensions",
+    "setup": "yarn && install-vscode-extensions",
     "ui": "cd ui && yarn",
     "daemon": "cd daemon && yarn",
     "deploy": "cd deploy && yarn",
