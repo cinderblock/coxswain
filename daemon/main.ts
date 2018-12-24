@@ -12,7 +12,7 @@ const ServerStarter = require('server-starter');
 import debug from './utils/debug';
 import makeClientHandler from './ClientUIHandler';
 import tunnel from './TunnelHandler';
-import auth from './authHandler';
+import Storage from './storageHandler';
 import github, { Repository } from './githubHandler';
 
 const clientServer = http.createServer();
@@ -21,7 +21,7 @@ const hookServer = http.createServer();
 const clientServerListen = 8000;
 const hookServerListen = 8001;
 
-const Token = auth();
+const storage = Storage();
 
 let repos: Repository[] = [];
 let gh: any;
@@ -81,7 +81,7 @@ const remoteControlServer = makeClientHandler(
     Shutdown,
 
     token(token: string) {
-      Token.save(token).then(
+      storage.save({ token }).then(
         () => {
           console.log('Token saved');
         },
@@ -99,7 +99,8 @@ const remoteControlServer = makeClientHandler(
     },
   },
   (sock: SocketIO.Socket) => {
-    sock.emit('authorized', !!Token.get());
+    const data = storage.get();
+    sock.emit('authorized', !!(data && data.token));
     sock.emit('repositories', repos);
   }
 );
@@ -123,7 +124,10 @@ async function updateRepo(repo: Repository) {
 }
 
 async function main() {
-  const token = Token.get();
+  const data = storage.get();
+  if (!data) return;
+
+  const token = data.token;
 
   if (!token) {
     debug.notice('No token!');
@@ -143,4 +147,4 @@ async function main() {
 
 debug.green('Hello, world.');
 
-Token.loaded.then(() => main());
+storage.loaded.then(() => main());
