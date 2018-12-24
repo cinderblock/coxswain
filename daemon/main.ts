@@ -11,14 +11,17 @@ const ServerStarter = require('server-starter');
 // Local dependencies
 import debug from './utils/debug';
 import makeClientHandler from './ClientUIHandler';
-
 import tunnel from './TunnelHandler';
+import auth from './authHandler';
+import github from './githubHandler';
 
 const clientServer = http.createServer();
 const hookServer = http.createServer();
 
 const clientServerListen = 8000;
 const hookServerListen = 8001;
+
+const Token = auth();
 
 ServerStarter(
   clientServer,
@@ -60,24 +63,34 @@ ServerStarter(
   }
 );
 
-(async function() {
-  console.log('URL:', await tunnel(hookServerListen).url());
-})();
-
 // Events from the clients and how to handle them
-const remoteControlServer = makeClientHandler(clientServer, {
-  // This event happens when mobile devices report their orientation data to the server.
-  // This could be very useful as a remote.
-  // Careful, this event happens at ~60Hz.
-  deviceorientation: (orientation: { alpha: number; beta: number; gamma: number; absolute?: boolean }) => {
-    // debug.log(orientation);
+const remoteControlServer = makeClientHandler(
+  clientServer,
+  {
+    // This event happens when mobile devices report their orientation data to the server.
+    // This could be very useful as a remote.
+    // Careful, this event happens at ~60Hz.
+    deviceorientation: (orientation: { alpha: number; beta: number; gamma: number; absolute?: boolean }) => {
+      // debug.log(orientation);
+    },
+
+    // Shut the whole thing down.
+    Shutdown,
+    login(token: string) {
+      Token.save(token).catch(e => {
+        console.log('Failed to save token file:', e);
+      });
+
+      main();
+    },
   },
-
-  // Shut the whole thing down.
-  Shutdown,
-});
-
-debug.green('Hello, world.');
+  (sock: SocketIO.Socket) => {
+    if (!Token.get()) {
+      sock.emit('noauth');
+      return;
+    }
+  }
+);
 
 function Shutdown() {
   setImmediate(() => {
@@ -92,3 +105,19 @@ function Shutdown() {
     }, 100).unref();
   });
 }
+
+async function main() {
+  const token = Token.get();
+
+  if (!token) {
+    debug.notice('No token!');
+    return;
+  }
+  // console.log('URL:', await tunnel(hookServerListen).url());
+
+  const gh = await github(token);
+}
+
+debug.green('Hello, world.');
+
+main();
