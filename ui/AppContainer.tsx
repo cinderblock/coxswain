@@ -7,6 +7,7 @@ import { Button, ButtonGroup } from 'reactstrap';
 
 import SocketConnection, { notify } from './SocketConnection';
 import Authentication from './Authentication';
+import Coxswain from './Coxswain';
 
 export default function AppContainer(props: any) {
   const [authorized, setAuthorized] = useState<undefined | boolean>(undefined);
@@ -21,6 +22,6 @@ export default function AppContainer(props: any) {
     return <Authentication />;
   }
 
-  return <>Authorized!</>;
+  return <Coxswain />;
 
 }
