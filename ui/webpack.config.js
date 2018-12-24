@@ -23,7 +23,7 @@ module.exports = {
       title: 'My Webpacked App',
       meta: { viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no' },
     }),
-    new FaviconsWebpackPlugin('./assets/icons8-confetti-64.png'),
+    new FaviconsWebpackPlugin('./assets/icons8-dinghy-filled-50.png'),
     new ErrorOverlayPlugin(),
     // new webpack.HotModuleReplacementPlugin(),
   ],
