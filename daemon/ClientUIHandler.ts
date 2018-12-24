@@ -38,7 +38,7 @@ export default function setupClientSocket(server: http.Server, eventHandlers: { 
 
         handler(value, ID);
       });
-    }, 500);
+    }, 200);
   }
 
   const sock = SocketIO(server, {
