@@ -1,5 +1,5 @@
 {
-  "name": "webui",
+  "name": "ui",
   "scripts": {
     "setup": "yarn install --non-interactive --silent && yarn",
     "start": "webpack-dev-server",
