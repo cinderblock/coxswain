@@ -91,10 +91,7 @@ const remoteControlServer = makeClientHandler(
     },
   },
   (sock: SocketIO.Socket) => {
-    if (!Token.get()) {
-      sock.emit('noauth');
-      return;
-    }
+    sock.emit('authorized', !!Token.get());
   }
 );
 
@@ -119,9 +116,12 @@ async function main() {
     debug.notice('No token!');
     return;
   }
+
   // console.log('URL:', await tunnel(hookServerListen).url());
 
   const gh = await github(token);
+
+  remoteControlServer.emitAll('authorized', true);
 }
 
 debug.green('Hello, world.');

@@ -63,9 +63,9 @@ export default function makeSocketIOServer(
   //   });
   // }, 1000 / 30); // at 30 Hz
 
-  function notify(event: string, ...args: any) {
+  function emitAll(event: string, ...args: any) {
     sock.sockets.emit(event, ...args);
   }
 
-  return { close: sock.close, on: sock.on, notify };
+  return { close: sock.close, on: sock.on, emitAll };
 }

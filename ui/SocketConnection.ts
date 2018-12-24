@@ -26,10 +26,7 @@ function linkStore(index: string) {
 }
 
 linkStore('startuptime');
-
-socket.on('noauth', () => {
-  updateStore('authorized', false);
-});
+linkStore('authorized');
 
 function notify(index: string, setState: React.Dispatch<React.SetStateAction<any>>) {
   return function() {
