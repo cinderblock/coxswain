@@ -17,9 +17,9 @@ function repository(repo: Repository, index: number) {
 }
 
 export default function Coxswain(props: any) {
-  const [repolist, setRepolist] = useState<Repository[]>([]);
+  const [repoList, setRepoList] = useState<Repository[]>([]);
 
-  useEffect(notify('repositories', setRepolist));
+  useEffect(notify('repositories', setRepoList));
 
-  return <ul>{repolist && repolist.map(repository)}</ul>;
+  return <ul>{repoList && repoList.map(repository)}</ul>;
 }
