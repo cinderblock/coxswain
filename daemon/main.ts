@@ -13,7 +13,7 @@ import debug from './utils/debug';
 import makeClientHandler from './ClientUIHandler';
 import tunnel from './TunnelHandler';
 import auth from './authHandler';
-import github from './githubHandler';
+import github, { Repository } from './githubHandler';
 
 const clientServer = http.createServer();
 const hookServer = http.createServer();
@@ -22,6 +22,8 @@ const clientServerListen = 8000;
 const hookServerListen = 8001;
 
 const Token = auth();
+
+let repos: Repository[] = [];
 
 ServerStarter(
   clientServer,
@@ -92,6 +94,7 @@ const remoteControlServer = makeClientHandler(
   },
   (sock: SocketIO.Socket) => {
     sock.emit('authorized', !!Token.get());
+    sock.emit('repositories', repos);
   }
 );
 
@@ -122,11 +125,11 @@ async function main() {
   const gh = github(token);
   remoteControlServer.emitAll('authorized', true);
 
-  const list = await gh.getRepositoryList();
+  repos = await gh.getRepositoryList();
 
-  debug.info('Loaded repos:', list.length);
+  debug.info('Loaded repos:', repos.length);
 
-  remoteControlServer.emitAll('repositories', list);
+  remoteControlServer.emitAll('repositories', repos);
 }
 
 debug.green('Hello, world.');
