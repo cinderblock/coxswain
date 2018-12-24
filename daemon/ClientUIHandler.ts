@@ -3,11 +3,9 @@ import http from 'http';
 import os from 'os';
 import SocketIO from 'socket.io';
 
-const ServerStarter = require('server-starter');
-
 let clientID = 0;
 
-module.exports = function setupClientSocket(eventHandlers: { [x: string]: Function }) {
+module.exports = function setupClientSocket(server: http.Server, eventHandlers: { [x: string]: Function }) {
   // Helper function that is run every time a new webUI connects to us
   function setupClientSocket(sock: SocketIO.Socket) {
     const ID = clientID++;
@@ -43,8 +41,6 @@ module.exports = function setupClientSocket(eventHandlers: { [x: string]: Functi
     }, 500);
   }
 
-  const server = http.createServer();
-
   const sock = SocketIO(server, {
     serveClient: false,
     transports: ['websocket'],
@@ -53,26 +49,6 @@ module.exports = function setupClientSocket(eventHandlers: { [x: string]: Functi
 
   // When a new client connects, setup handlers for the possible incoming commands
   sock.on('connection', setupClientSocket);
-
-  ServerStarter(
-    server,
-    {
-      listen: 8000,
-      // listen: '/tmp/daemon.sock',
-      // socketMode: 0o777,
-      // socketOwner: {
-      //   //user: 'pi',
-      //   group: 'www-data',
-      // },
-    },
-    (err?: Error, info?: string, extra?: string) => {
-      if (err) {
-        console.log(chalk.red('ERROR:'), err, info, extra);
-      } else {
-        // console.log('Listening:', info);
-      }
-    }
-  );
 
   // Send regular updates to UI
   setInterval(() => {
