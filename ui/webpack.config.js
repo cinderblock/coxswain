@@ -28,7 +28,7 @@ module.exports = {
     // new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
-    port: 9001,
+    port: 9000,
     host: '0.0.0.0',
     disableHostCheck: true,
     stats: 'minimal',
