@@ -7,12 +7,18 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 const debug = require('./utils/debug.js');
 const makeClientHandler = require('./ClientUIHandler.js');
 
+import tunnel from './TunnelHandler';
+
+(async function() {
+  console.log('URL:', await tunnel(9002).url());
+})();
+
 // Events from the clients and how to handle them
 const remoteControlServer = makeClientHandler({
   // This event happens when mobile devices report their orientation data to the server.
   // This could be very useful as a remote.
   // Careful, this event happens at ~60Hz.
-  deviceorientation: orientation => {
+  deviceorientation: (orientation: { alpha: number; beta: number; gamma: number; absolute?: boolean }) => {
     // debug.log(orientation);
   },
 
