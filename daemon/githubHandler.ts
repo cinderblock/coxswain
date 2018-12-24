@@ -2,7 +2,7 @@ import * as Octokit from '@octokit/rest';
 
 const octokit = new Octokit();
 
-type Repository = Octokit.AppsListReposResponseRepositoriesItem;
+export type Repository = Octokit.AppsListReposResponseRepositoriesItem;
 
 export default function github(token: string) {
   octokit.authenticate({ type: 'token', token });
