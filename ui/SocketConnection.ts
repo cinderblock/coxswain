@@ -14,6 +14,7 @@ type Stored<T> = { setState?: React.Dispatch<React.SetStateAction<T>>; value?: T
 const Store: { [x: string]: Stored<any> } = {};
 
 function updateStore(index: string, value: any) {
+  // console.log('Update:', index, '-', value);
   if (!Store[index]) Store[index] = { value };
   else Store[index].value = value;
 
