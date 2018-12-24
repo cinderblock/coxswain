@@ -5,7 +5,7 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 
 // Local dependencies
 const debug = require('./utils/debug.js');
-const makeClientHandler = require('./ClientHandler.js');
+const makeClientHandler = require('./ClientUIHandler.js');
 
 // Events from the clients and how to handle them
 const remoteControlServer = makeClientHandler({
