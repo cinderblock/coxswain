@@ -1,5 +1,5 @@
-import fs from 'fs';
-import util from 'util';
+import * as fs from 'fs';
+import * as util from 'util';
 
 const authFile = 'auth.txt';
 
