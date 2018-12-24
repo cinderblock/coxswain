@@ -119,8 +119,7 @@ async function main() {
 
   // console.log('URL:', await tunnel(hookServerListen).url());
 
-  const gh = await github(token);
-
+  const gh = github(token);
   remoteControlServer.emitAll('authorized', true);
 }
 
