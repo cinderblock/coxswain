@@ -1,20 +1,20 @@
-const os = require('os');
-const http = require('http');
+import chalk from 'chalk';
+import http from 'http';
+import * as os from 'os';
+import SocketIO from 'socket.io';
 
-const chalk = require('chalk');
-const SocketIO = require('socket.io');
 const ServerStarter = require('server-starter');
 
 let clientID = 0;
 
-module.exports = function setupClientSocket(eventHandlers) {
+module.exports = function setupClientSocket(eventHandlers: { [x: string]: Function }) {
   // Helper function that is run every time a new webUI connects to us
-  function setupClientSocket(sock) {
+  function setupClientSocket(sock: SocketIO.Socket) {
     const ID = clientID++;
 
     // TODO: Do we trust the proxy to set true `x-real-ip` header?
     const headers = sock.conn.request.headers;
-    const address = headers['X-Forwarded-For'] || headers['x-real-ip'] || sock.handshake.address;
+    const address: string = headers['X-Forwarded-For'] || headers['x-real-ip'] || sock.handshake.address;
     console.log(chalk.green('Client connected:'), chalk.cyan(address));
 
     // Give clients a our startup time once
@@ -43,9 +43,9 @@ module.exports = function setupClientSocket(eventHandlers) {
     }, 500);
   }
 
-  const server = new http.createServer();
+  const server = http.createServer();
 
-  const sock = new SocketIO(server, {
+  const sock = SocketIO(server, {
     serveClient: false,
     transports: ['websocket'],
     pingInterval: 1000,
@@ -65,7 +65,7 @@ module.exports = function setupClientSocket(eventHandlers) {
       //   group: 'www-data',
       // },
     },
-    (err, info, extra) => {
+    (err?: Error, info?: string, extra?: string) => {
       if (err) {
         console.log(chalk.red('ERROR:'), err, info, extra);
       } else {

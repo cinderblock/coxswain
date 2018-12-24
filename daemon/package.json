@@ -20,6 +20,9 @@
     "typescript": "^3.2.2"
   },
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/node": "^10.12.18",
+    "@types/socket.io": "^2.1.2",
     "nodemon": "^1.18.9"
   },
   "optionalDependencies": {

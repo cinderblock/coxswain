@@ -5,7 +5,7 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 
 // Local dependencies
 const debug = require('./utils/debug.js');
-const makeClientHandler = require('./ClientUIHandler.js');
+const makeClientHandler = require('./ClientUIHandler.ts');
 
 import tunnel from './TunnelHandler';
 
