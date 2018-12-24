@@ -28,6 +28,7 @@ function linkStore(index: string) {
 
 linkStore('startuptime');
 linkStore('authorized');
+linkStore('repositories');
 
 function notify(index: string, setState: React.Dispatch<React.SetStateAction<any>>) {
   return function() {
