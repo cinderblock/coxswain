@@ -81,5 +81,5 @@ module.exports = function setupClientSocket(eventHandlers) {
     });
   }, 1000 / 30); // at 30 Hz
 
-  return { close: () => sock.close() };
+  return sock;
 };
