@@ -7,16 +7,18 @@ export type Repository = Octokit.AppsListReposResponseRepositoriesItem;
 export default function github(token: string) {
   octokit.authenticate({ type: 'token', token });
 
-  async function depaginate<T>(func: Function, options: any = {}) {
+  async function depaginate<T>(func: Function, options: any = { per_page: 100 }) {
     const list: T[] = [];
     try {
       let i = 1;
       // max of 100 per API
-      const per_page = 100;
+      if (!(0 < options.per_page && options.per_page <= 100)) options.per_page = 100;
       // Just in case
       const maxPages = 200;
       while (i < maxPages) {
-        const next = (await func(Object.assign(options, { per_page, page: i++ }))).data;
+        options.page = i++;
+        const result = await func(options);
+        const next = result.data;
 
         // Just in case and handy shortcut
         if (!next || !next.length) break;
@@ -25,7 +27,7 @@ export default function github(token: string) {
         list.splice(list.length, 0, ...next);
 
         // If we got fewer than the max length, we're at the end of the list
-        if (next.length < per_page) break;
+        if (next.length < options.per_page) break;
       }
       return list;
     } catch (e) {
