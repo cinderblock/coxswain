@@ -16,7 +16,6 @@ export default function github(token: string) {
       // Just in case
       const maxPages = 200;
       while (i < maxPages) {
-        const oldLength = list.length;
         const next = (await func(Object.assign(options, { per_page, page: i++ }))).data;
 
         // Just in case and handy shortcut
