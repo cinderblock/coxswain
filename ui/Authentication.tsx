@@ -19,7 +19,7 @@ export default function Authentication(props: any) {
         <img src={scopes} />
       </p>
       <h3>Input token:</h3>
-      <input type="text" onChange={handleNewToken} />
+      <input type="text" onChange={handleNewToken} maxLength={40} size={40} />
       <p>
         Looks like:
         <pre>4e726a19e66f51a16dd7aa63e6b1a1e901be4225</pre>
