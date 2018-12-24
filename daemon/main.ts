@@ -24,6 +24,7 @@ const hookServerListen = 8001;
 const Token = auth();
 
 let repos: Repository[] = [];
+let gh: any;
 
 ServerStarter(
   clientServer,
@@ -91,6 +92,11 @@ const remoteControlServer = makeClientHandler(
 
       main();
     },
+
+    async selectRepo(repo: Repository) {
+      const hooks = await gh.getHooks(repo);
+      console.log(hooks && hooks.length);
+    },
   },
   (sock: SocketIO.Socket) => {
     sock.emit('authorized', !!Token.get());
@@ -122,8 +128,8 @@ async function main() {
 
   // console.log('URL:', await tunnel(hookServerListen).url());
 
-  const gh = github(token);
   remoteControlServer.emitAll('authorized', true);
+  gh = github(token);
 
   repos = await gh.getRepositoryList();
 

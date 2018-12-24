@@ -7,30 +7,50 @@ export type Repository = Octokit.AppsListReposResponseRepositoriesItem;
 export default function github(token: string) {
   octokit.authenticate({ type: 'token', token });
 
-  async function getRepositoryList() {
-    const list: Repository[] = [];
-    let i = 1;
-    // max of 100 per API
-    const per_page = 100;
-    const maxPages = 100;
-    while (i < maxPages) {
-      const oldLength = list.length;
-      const next = (await octokit.repos.list({ per_page, page: i++ })).data;
-      // list = list.concat(next);
-      list.splice(-1, 0, ...next);
+  async function depaginate<T>(func: Function, options: any = {}) {
+    const list: T[] = [];
+    try {
+      let i = 1;
+      // max of 100 per API
+      const per_page = 1;
+      // Just in case
+      const maxPages = 200;
+      while (i < maxPages) {
+        const oldLength = list.length;
+        const next = (await func(Object.assign(options, { per_page, page: i++ }))).data;
 
-      // Either of the following checks should be sufficient.
+        // Just in case and handy shortcut
+        if (!next || !next.length) break;
 
-      // If we haven't changed length
-      if (list.length == oldLength) break;
+        // list = list.concat(next);
+        list.splice(list.length, 0, ...next);
 
-      // If we got fewer than then max length
-      if (next.length < per_page) break;
+        // If we got fewer than the max length, we're at the end of the list
+        if (next.length < per_page) break;
+      }
+      return list;
+    } catch (e) {
+      // Some other error
+      if (list.length !== 0) return list;
+
+      // Github is very strict about security and returns 404 for anything
+      if (e.status === 404) return false;
+
+      throw e;
     }
-    return list;
+  }
+
+  async function getRepositoryList() {
+    return depaginate<Repository>(octokit.repos.list);
+  }
+
+  async function getHooks(repo: Repository) {
+    const opts: Octokit.ReposListHooksParams = { owner: repo.owner.login, repo: repo.name };
+    return depaginate<Octokit.ReposListHooksResponseItem>(octokit.repos.listHooks, opts);
   }
 
   return {
     getRepositoryList,
+    getHooks,
   };
 }
