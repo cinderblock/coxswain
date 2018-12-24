@@ -121,6 +121,10 @@ async function main() {
 
   const gh = github(token);
   remoteControlServer.emitAll('authorized', true);
+
+  const list = await gh.getRepositoryList();
+
+  debug.info('Loaded repos:', list.length);
 }
 
 debug.green('Hello, world.');
