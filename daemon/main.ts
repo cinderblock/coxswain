@@ -76,10 +76,16 @@ const remoteControlServer = makeClientHandler(
 
     // Shut the whole thing down.
     Shutdown,
-    login(token: string) {
-      Token.save(token).catch(e => {
-        console.log('Failed to save token file:', e);
-      });
+
+    token(token: string) {
+      Token.save(token).then(
+        () => {
+          console.log('Token saved');
+        },
+        e => {
+          console.log('Failed to save token file:', e);
+        }
+      );
 
       main();
     },
