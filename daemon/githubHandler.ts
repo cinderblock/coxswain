@@ -12,7 +12,7 @@ export default function github(token: string) {
     try {
       let i = 1;
       // max of 100 per API
-      const per_page = 1;
+      const per_page = 100;
       // Just in case
       const maxPages = 200;
       while (i < maxPages) {
