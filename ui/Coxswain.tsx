@@ -7,6 +7,9 @@ function repository(repo: Repository, index: number) {
   return (
     <li
       key={index}
+      onClick={event => {
+        eventHandler('selectRepo')(repo);
+      }}
     >
       {repo.full_name}
     </li>
