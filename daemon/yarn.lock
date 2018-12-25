@@ -1564,6 +1564,11 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
+node-bin-setup@^1.0.0:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/node-bin-setup/-/node-bin-setup-1.0.6.tgz#4b5c9bb937ece702d7069b36ca78af4684677528"
+  integrity sha512-uPIxXNis1CRbv1DwqAxkgBk5NFV3s7cMN/Gf556jSw6jBvV7ca4F9lRL/8cALcZecRibeqU+5dFYqFFmzv5a0Q==
+
 node-fetch@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
@@ -1584,6 +1589,13 @@ node-pre-gyp@^0.10.0:
     rimraf "^2.6.1"
     semver "^5.3.0"
     tar "^4"
+
+node@^10.14.2:
+  version "10.14.2"
+  resolved "https://registry.yarnpkg.com/node/-/node-10.14.2.tgz#d1ee2d09b821da278f9e7da569175b31ddc9be25"
+  integrity sha512-q5pf9Rzb/a7YO6abh0eKsM5bzeH6pH7AkmhCb/76QD0xTrmUYKt8I1OEwlcyOIycGpE5u6so4AJqytAXbGi/hg==
+  dependencies:
+    node-bin-setup "^1.0.0"
 
 nodemon@^1.18.9:
   version "1.18.9"
