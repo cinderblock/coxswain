@@ -11,7 +11,7 @@ const ServerStarter = require('server-starter');
 // Local dependencies
 import debug from './utils/debug';
 import makeClientHandler from './ClientUIHandler';
-import tunnel from './TunnelHandler';
+import Tunnel from './TunnelHandler';
 import Storage from './storageHandler';
 import github, { Repository } from './githubHandler';
 
@@ -127,9 +127,8 @@ function Shutdown() {
   });
 }
 
-async function updateRepo(repo: Repository) {
-  // console.log('URL:', await tunnel(hookServerListen).url());
-}
+const tunnel = Tunnel(hookServerListen);
+tunnel.url().then(debug.variable.bind(0, 'Tunnel URL'));
 
 async function prepare() {
   const data = storage.get();
