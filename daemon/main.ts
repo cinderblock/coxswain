@@ -88,7 +88,7 @@ const remoteControlServer = makeClientHandler(
         })
         .catch(debug.error.bind(0, 'Failed to save:'));
 
-      main();
+      prepare();
     },
 
     async selectRepo(repo: Repository) {
@@ -103,7 +103,7 @@ const remoteControlServer = makeClientHandler(
         })
         .catch(debug.error.bind(0, 'Failed to save:'));
 
-      main();
+      prepare();
     },
   },
   (sock: SocketIO.Socket) => {
@@ -131,7 +131,7 @@ async function updateRepo(repo: Repository) {
   // console.log('URL:', await tunnel(hookServerListen).url());
 }
 
-async function main() {
+async function prepare() {
   const data = storage.get();
   if (!data) return;
 
@@ -192,4 +192,4 @@ async function main() {
 
 debug.green('Hello, world.');
 
-storage.loaded.then(() => main());
+storage.loaded.then(() => prepare());
