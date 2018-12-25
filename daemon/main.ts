@@ -143,6 +143,36 @@ async function main() {
   debug.info('Loaded repos:', repos.length);
 
   remoteControlServer.emitAll('repositories', repos);
+
+  const repository = data.repository;
+
+  if (!repository) {
+    debug.notice('No repository selected!');
+    return;
+  }
+
+  const res = repository.match(/^(?<host>[^/]+)\/(?<owner>[^/]+)\/(?<name>[^/]+)$/);
+
+  if (!res) {
+    debug.error('Bad repository format:', repository);
+    return;
+  }
+
+  console.log(res);
+
+  const { host, owner, name } = res.groups as { host: string; owner: string; name: string };
+
+  if (host !== 'github.com') {
+    debug.error('Only github.com is supported currently');
+    return;
+  }
+
+  const repo = repos.find(r => r.owner.login === owner && r.name === name);
+
+  if (!repo) {
+    debug.error('Repo not found');
+    return;
+  }
 }
 
 debug.green('Hello, world.');
