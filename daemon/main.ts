@@ -203,6 +203,8 @@ async function runMain(repo: Repository, branch?: string) {
   }
   running = true;
 
+  await storage.loaded;
+
   const data = storage.get();
   if (!data || !data.instanceID || !data.repository || !data.token) {
     running = false;
