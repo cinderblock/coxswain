@@ -4,7 +4,7 @@ import * as util from 'util';
 const backendFile = 'data.json';
 
 type StoredData = {
-  token: string;
+  token?: string;
   repository?: string;
 };
 
