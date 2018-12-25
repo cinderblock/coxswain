@@ -1,4 +1,4 @@
-const ngrok = require('ngrok');
+import ngrok from 'ngrok';
 
 export default function(port: number) {
   const URL = ngrok.connect(port);
