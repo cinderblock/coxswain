@@ -1,11 +1,13 @@
 import * as fs from 'fs';
 import * as util from 'util';
+import * as uuid from 'uuid/v4';
 
 const backendFile = 'data.json';
 
 type StoredData = {
   token?: string;
   repository?: string;
+  instanceID?: string;
 };
 
 export default function Storage() {
@@ -15,6 +17,11 @@ export default function Storage() {
     fs.readFile(backendFile, (err, buff) => {
       if (err) return resolve(false);
       saved = JSON.parse(buff.toString()) as StoredData;
+
+      if (saved.instanceID === undefined) {
+        save({ instanceID: uuid() });
+      }
+
       resolve(true);
     });
   });

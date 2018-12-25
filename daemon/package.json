@@ -18,7 +18,8 @@
     "server-starter": "^1.3.1",
     "socket.io": "^2.1.1",
     "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
