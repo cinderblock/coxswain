@@ -1,5 +1,5 @@
 {
-  "watch": ["**/*.js", "**/*.ts", "tsconfig.json", "package.json"],
-  "ignore": ["**/*.d.ts", "data.json"],
-  "exec": "ts-node ./main.ts"
+  "watch": ["*.js", "*.ts", "tsconfig.json", "package.json"],
+  "ext": "ts",
+  "exec": "ts-node"
 }
