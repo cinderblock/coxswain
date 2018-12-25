@@ -23,5 +23,4 @@ export default function AppContainer(props: any) {
   }
 
   return <Coxswain />;
-
 }

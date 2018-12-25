@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
     "lib": ["es2015", "dom"],
     // Enable all strict type-checking options.
     "strict": true,
