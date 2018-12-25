@@ -81,14 +81,12 @@ const remoteControlServer = makeClientHandler(
     Shutdown,
 
     token(token: string) {
-      storage.save({ token }).then(
-        () => {
+      storage
+        .save({ token })
+        .then(() => {
           debug.info('Token saved');
-        },
-        e => {
-          debug.error('Failed to save token file:', e);
-        }
-      );
+        })
+        .catch(debug.error.bind(0, 'Failed to save:'));
 
       main();
     },
