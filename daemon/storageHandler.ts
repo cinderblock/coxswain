@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as util from 'util';
-import * as uuid from 'uuid/v4';
+import fs from 'fs';
+import util from 'util';
+import uuid from 'uuid/v4';
 
 const backendFile = 'data.json';
 

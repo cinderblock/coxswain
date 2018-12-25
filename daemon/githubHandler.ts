@@ -1,10 +1,9 @@
-import * as Octokit from '@octokit/rest';
-
-const octokit = new Octokit();
+import Octokit from '@octokit/rest';
 
 export type Repository = Octokit.AppsListReposResponseRepositoriesItem;
 
 export default function github(token: string) {
+  const octokit = new Octokit();
   octokit.authenticate({ type: 'token', token });
 
   async function depaginate<T>(func: Function, options: any = { per_page: 100 }) {

@@ -25,6 +25,7 @@
     "@types/chalk": "^2.2.0",
     "@types/node": "^10.12.18",
     "@types/socket.io": "^2.1.2",
+    "@types/uuid": "^3.4.4",
     "nodemon": "^1.18.9"
   },
   "optionalDependencies": {

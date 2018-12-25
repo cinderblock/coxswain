@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import * as http from 'http';
-import * as os from 'os';
-import * as SocketIO from 'socket.io';
+import http from 'http';
+import os from 'os';
+import SocketIO from 'socket.io';
 
 let clientID = 0;
 
