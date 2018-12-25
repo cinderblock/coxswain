@@ -218,15 +218,15 @@ async function runMain(repo: Repository, branch?: string) {
 
   const hookURL = [URL, 'coxswain', data.instanceID, tunnel.id, runID].join('/');
 
-  // TODO: Send URL to GH
-
-  // TODO: on express event...
-
   console.log('setting up hook');
+
+  // TODO: Send URL to GH
 
   hooks.use(async ctx => {
     console.log('test');
     ctx.body = 'Hello';
+
+    // TODO: on express event...
   });
 
   // TODO: Handle shutdown somehow...
