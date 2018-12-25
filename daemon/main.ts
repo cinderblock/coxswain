@@ -195,9 +195,19 @@ async function prepare() {
   runMain(repo, branch);
 }
 
+let running = false;
 async function runMain(repo: Repository, branch?: string) {
+  if (running) {
+    debug.error('Trying to run twice...');
+    return;
+  }
+  running = true;
+
   const data = storage.get();
-  if (!data || !data.instanceID || !data.repository || !data.token) return;
+  if (!data || !data.instanceID || !data.repository || !data.token) {
+    running = false;
+    return;
+  }
 
   const runID = uuid();
   const URL = await tunnel.url();
@@ -209,6 +219,8 @@ async function runMain(repo: Repository, branch?: string) {
   // TODO: on express event...
 
   // TODO: Handle shutdown somehow...
+
+  running = false;
 }
 
 storage.loaded.then(() => prepare());
