@@ -138,6 +138,13 @@ async function main() {
 
   repos = await gh.getRepositoryList();
 
+  if (!repos) {
+    remoteControlServer.emitAll('authorized', false);
+    debug.error('Authorization failed');
+    storage.save({ token: undefined });
+    return;
+  }
+
   debug.info('Loaded repos:', repos.length);
 
   remoteControlServer.emitAll('repositories', repos);
