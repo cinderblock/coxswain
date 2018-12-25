@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
+    "esModuleInterop": true,
     "lib": ["es2018"],
-    "strict": true,
-    "esModuleInterop": true
+    "strict": true
   }
 }
