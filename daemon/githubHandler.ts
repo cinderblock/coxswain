@@ -45,8 +45,8 @@ export default function github(token: string) {
     return depaginate<Repository>(octokit.repos.list);
   }
 
-  async function getHooks(repo: Repository) {
-    const opts: Octokit.ReposListHooksParams = { owner: repo.owner.login, repo: repo.name };
+  async function getHooks(owner: string, repo: string) {
+    const opts: Octokit.ReposListHooksParams = { owner, repo };
     return depaginate<Octokit.ReposListHooksResponseItem>(octokit.repos.listHooks, opts);
   }
 

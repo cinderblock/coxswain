@@ -94,7 +94,7 @@ const remoteControlServer = makeClientHandler(
     },
 
     async selectRepo(repo: Repository) {
-      const hooks = await gh.getHooks(repo);
+      const hooks = await gh.getHooks(repo.owner.login, repo.name);
       console.log(hooks && hooks.length);
     },
   },
