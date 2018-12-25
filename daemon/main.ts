@@ -92,8 +92,18 @@ const remoteControlServer = makeClientHandler(
     },
 
     async selectRepo(repo: Repository) {
-      const hooks = await gh.getHooks(repo.owner.login, repo.name);
-      console.log(hooks && hooks.length);
+      const repository = `github.com/${repo.owner.login}/${repo.name}`;
+
+      debug.info('Selected repo:', repository);
+
+      storage
+        .save({ repository })
+        .then(() => {
+          debug.info('Repository selection saved');
+        })
+        .catch(debug.error.bind(0, 'Failed to save:'));
+
+      main();
     },
   },
   (sock: SocketIO.Socket) => {
