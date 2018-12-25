@@ -14,7 +14,7 @@ export default function Storage() {
   let loaded = new Promise(resolve => {
     fs.readFile(backendFile, (err, buff) => {
       if (err) return resolve(false);
-      saved = JSON.parse(buff.toString());
+      saved = JSON.parse(buff.toString()) as StoredData;
       resolve(true);
     });
   });
