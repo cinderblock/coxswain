@@ -83,10 +83,10 @@ const remoteControlServer = makeClientHandler(
     token(token: string) {
       storage.save({ token }).then(
         () => {
-          console.log('Token saved');
+          debug.info('Token saved');
         },
         e => {
-          console.log('Failed to save token file:', e);
+          debug.error('Failed to save token file:', e);
         }
       );
 
