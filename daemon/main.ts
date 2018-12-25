@@ -6,8 +6,8 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 import http from 'http';
 import chalk from 'chalk';
 import uuid from 'uuid/v4';
-
 import ServerStarter from 'server-starter';
+import Koa from 'koa';
 
 // Local dependencies
 import debug from './utils/debug';
@@ -16,8 +16,10 @@ import Tunnel from './TunnelHandler';
 import Storage from './storageHandler';
 import github, { Repository } from './githubHandler';
 
+const hooks = new Koa();
+
 const clientServer = http.createServer();
-const hookServer = http.createServer();
+const hookServer = http.createServer(hooks.callback());
 
 const clientServerListen = 8000;
 const hookServerListen = 8001;
@@ -219,6 +221,13 @@ async function runMain(repo: Repository, branch?: string) {
   // TODO: Send URL to GH
 
   // TODO: on express event...
+
+  console.log('setting up hook');
+
+  hooks.use(async ctx => {
+    console.log('test');
+    ctx.body = 'Hello';
+  });
 
   // TODO: Handle shutdown somehow...
 
