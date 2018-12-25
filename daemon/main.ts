@@ -23,8 +23,8 @@ const hookServerListen = 8001;
 
 const storage = Storage();
 
-let repos: Repository[] = [];
-let gh: any;
+let repos: Repository[] | false | undefined;
+let gh = github();
 
 ServerStarter(
   clientServer,
@@ -134,7 +134,7 @@ async function main() {
 
   remoteControlServer.emitAll('authorized', true);
 
-  gh = github(token);
+  gh.authorize(token);
 
   repos = await gh.getRepositoryList();
 

@@ -2,9 +2,12 @@ import Octokit from '@octokit/rest';
 
 export type Repository = Octokit.AppsListReposResponseRepositoriesItem;
 
-export default function github(token: string) {
+export default function github() {
   const octokit = new Octokit();
-  octokit.authenticate({ type: 'token', token });
+
+  function authorize(token: string) {
+    octokit.authenticate({ type: 'token', token });
+  }
 
   async function depaginate<T>(func: Function, options: any = { per_page: 100 }) {
     const list: T[] = [];
@@ -54,6 +57,7 @@ export default function github(token: string) {
   }
 
   return {
+    authorize,
     getRepositoryList,
     getHooks,
     registerHook,
