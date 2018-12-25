@@ -5,6 +5,7 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 
 import http from 'http';
 import chalk from 'chalk';
+import uuid from 'uuid/v4';
 
 const ServerStarter = require('server-starter');
 
@@ -187,6 +188,27 @@ async function prepare() {
     debug.error('Repo not found');
     return;
   }
+
+  // TODO: Make selectable and load default from GH
+  const branch = 'master';
+
+  runMain(repo, branch);
+}
+
+async function runMain(repo: Repository, branch?: string) {
+  const data = storage.get();
+  if (!data || !data.instanceID || !data.repository || !data.token) return;
+
+  const runID = uuid();
+  const URL = await tunnel.url();
+
+  const hookURL = [URL, 'coxswain', data.instanceID, tunnel.id, runID].join('/');
+
+  // TODO: Send URL to GH
+
+  // TODO: on express event...
+
+  // TODO: Handle shutdown somehow...
 }
 
 debug.green('Hello, world.');
