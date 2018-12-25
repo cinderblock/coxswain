@@ -36,8 +36,10 @@ export default function github() {
       // Some other error
       if (list.length !== 0) return list;
 
-      // Github is very strict about security and returns 404 for anything
+      // Github sometimes responds with 404 to mean unauthorized
       if (e.status === 404) return false;
+      // Sometimes responds with 401
+      if (e.status === 401) return false;
 
       console.log(e);
 
