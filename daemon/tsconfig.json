@@ -2,7 +2,6 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "lib": ["es2015"],
-    "types": ["node"],
     "strict": true,
     "esModuleInterop": true
   }
