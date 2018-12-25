@@ -2040,10 +2040,10 @@ semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.5.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
   integrity sha512-RS9R6R35NYgQn++fkDWaOmqGoj4Ek9gGs+DPxNUZKuwE183xjJroKvyo1IzVFeXvUrvmALy6FWD5xrdJT25gMg==
 
-server-starter@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/server-starter/-/server-starter-1.3.1.tgz#79fe9795e8ae5378432dc154ba3120edec950e25"
-  integrity sha512-VTGvoK55YGe8dO+fmUpk/KVAN24kG86WF7ofVqs8gFZeQ4OZhTJ6fOkNiFg07nkvCsV8GF5YfllPLwaf8kdQug==
+server-starter@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/server-starter/-/server-starter-1.4.1.tgz#b548da3467a311e8c9c1082ce601e8aa8c6f804e"
+  integrity sha512-O1EK1u0CgmIG5LH95vbJU/zDOvbs98ZMdsW2AcipEp097yxjRyE78VjO4nT3nuBhauGm11Ga743TffGPqBSGKg==
   optionalDependencies:
     userid "^0.3.1"
 

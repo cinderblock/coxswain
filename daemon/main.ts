@@ -7,7 +7,7 @@ import http from 'http';
 import chalk from 'chalk';
 import uuid from 'uuid/v4';
 
-const ServerStarter = require('server-starter');
+import ServerStarter from 'server-starter';
 
 // Local dependencies
 import debug from './utils/debug';
