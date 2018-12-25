@@ -1,1 +1,1 @@
-{ "watch": ["**/*.*"], "ignore": ["**/*.d.ts"], "exec": "ts-node ./main.ts" }
+{ "watch": ["**/*.*"], "ignore": ["**/*.d.ts", "data.json"], "exec": "ts-node ./main.ts" }
