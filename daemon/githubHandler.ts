@@ -39,6 +39,8 @@ export default function github() {
       // Github is very strict about security and returns 404 for anything
       if (e.status === 404) return false;
 
+      console.log(e);
+
       throw e;
     }
   }
