@@ -211,6 +211,4 @@ async function runMain(repo: Repository, branch?: string) {
   // TODO: Handle shutdown somehow...
 }
 
-debug.green('Hello, world.');
-
 storage.loaded.then(() => prepare());
