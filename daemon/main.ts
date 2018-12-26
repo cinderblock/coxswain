@@ -247,14 +247,14 @@ async function runMain(repo: Repository, branch?: string) {
 
   console.log('setting up hook');
 
-  // Register hook with github
-  gh.registerHook(owner, name, base + path, secret);
-
   // Create a new hook middleware
   const githubWebhook = new GithubWebhook({ path, secret });
 
   // Attach it to Koa hook server
   hooks.use(githubWebhook.middleware());
+
+  // Register hook with github
+  gh.registerHook(owner, name, base + path, secret);
 
   hooks.use(async ctx => {
     console.log('test');
