@@ -8,7 +8,7 @@
     "reboot": "sudo reboot",
     "kill": "kill $(cat /tmp/daemon.pid 2> /dev/null) 2> /dev/null || :",
     "setup": "yarn install --non-interactive --silent --prod && yarn",
-    "postinstall": "yarn install --ignore-scripts --check-files",
+    "postinstall": "yarn install --ignore-scripts --check-files --non-interactive --silent",
     "dev": "nodemon .",
     "start": "node ."
   },
