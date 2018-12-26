@@ -215,9 +215,10 @@ async function runMain(repo: Repository, branch?: string) {
   }
 
   const secret = uuid();
+  const runID = uuid();
   const base = await tunnel.url();
 
-  const path = ['', '__coxswain', data.instanceID, tunnel.id].join('/');
+  const path = ['', '__coxswain', data.instanceID, tunnel.id, runID].join('/');
 
   console.log('setting up hook');
 
