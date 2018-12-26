@@ -247,7 +247,7 @@ async function runMain(repo: Repository, branch?: string) {
 
   console.log('setting up hook');
 
-  // TODO: Send URL to GH
+  gh.registerHook(owner, name, base + path, secret);
 
   const githubWebhook = new GithubWebhook({ path, secret });
 
