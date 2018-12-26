@@ -56,8 +56,13 @@ export default function github() {
     return depaginate<Octokit.ReposListHooksResponseItem>(octokit.repos.listHooks, opts);
   }
 
-  async function registerHook(owner: string, repo: string, url: string) {
-    return octokit.repos.createHook({ owner, repo, name: 'web', config: { content_type: 'json', url } });
+  async function registerHook(owner: string, repo: string, url: string, secret: string) {
+    return octokit.repos.createHook({
+      owner,
+      repo,
+      name: 'web',
+      config: { content_type: 'json', url, secret },
+    });
   }
 
   return {
