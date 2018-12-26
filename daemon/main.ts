@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import uuid from 'uuid/v4';
 import ServerStarter from 'server-starter';
 import Koa from 'koa';
+import GithubWebhook from 'koa-github-webhook-secure';
 
 // Local dependencies
 import debug from './utils/debug';
@@ -213,20 +214,23 @@ async function runMain(repo: Repository, branch?: string) {
     return;
   }
 
-  const runID = uuid();
-  const URL = await tunnel.url();
+  const secret = uuid();
+  const base = await tunnel.url();
 
-  const hookURL = [URL, '__coxswain', data.instanceID, tunnel.id, runID].join('/');
+  const path = ['', '__coxswain', data.instanceID, tunnel.id].join('/');
 
   console.log('setting up hook');
 
   // TODO: Send URL to GH
 
+  const githubWebhook = new GithubWebhook({ path, secret });
+
+  hooks.use(githubWebhook.middleware());
+
   hooks.use(async ctx => {
     console.log('test');
     ctx.body = 'Hello';
-
-    // TODO: on express event...
+    // TODO: Don't have this hook.use here
   });
 
   // TODO: Handle shutdown somehow...
