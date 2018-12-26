@@ -253,6 +253,8 @@ async function runMain(repo: Repository, branch?: string) {
   // Attach it to Koa hook server
   hooks.use(githubWebhook.middleware());
 
+  githubWebhook.on('*', console.log);
+
   // Register hook with github
   gh.registerHook(owner, name, base + path, secret);
 
