@@ -62,6 +62,7 @@ export default function github() {
       repo,
       name: 'web',
       config: { content_type: 'json', url, secret },
+      events: ['push'],
     });
   }
 
