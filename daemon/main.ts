@@ -224,6 +224,21 @@ async function runMain(repo: Repository, branch?: string) {
     return;
   }
 
+  const res = parseRepositoryString(data.repository);
+
+  if (!res) {
+    debug.error('Bad repository format:', data.repository);
+    running = false;
+    return;
+  }
+
+  const { host, owner, name } = res;
+
+  if (host !== 'github.com') {
+    debug.error('Only github.com is supported currently');
+    return;
+  }
+
   const secret = uuid();
   const runID = uuid();
   const base = await tunnel.url();
