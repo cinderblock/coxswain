@@ -169,16 +169,14 @@ async function prepare() {
     return;
   }
 
-  const res = repository.match(/^(?<host>[^/]+)\/(?<owner>[^/]+)\/(?<name>[^/]+)$/);
+  const res = parseRepositoryString(repository);
 
   if (!res) {
     debug.error('Bad repository format:', repository);
     return;
   }
 
-  console.log(res);
-
-  const { host, owner, name } = res.groups as { host: string; owner: string; name: string };
+  const { host, owner, name } = res;
 
   if (host !== 'github.com') {
     debug.error('Only github.com is supported currently');
@@ -196,6 +194,18 @@ async function prepare() {
   const branch = 'master';
 
   runMain(repo, branch);
+}
+
+function parseRepositoryString(repository: string) {
+  const res = repository.match(/^(?<host>[^/]+)\/(?<owner>[^/]+)\/(?<name>[^/]+)$/);
+
+  if (!res) {
+    return false;
+  }
+
+  console.log(res);
+
+  return res.groups as { host: string; owner: string; name: string };
 }
 
 let running = false;
