@@ -3,6 +3,7 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "lib": ["es2018"],
+    "noImplicitAny": true,
     "strict": true
   }
 }
