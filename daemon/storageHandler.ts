@@ -23,7 +23,7 @@ export default function Storage() {
         }
       }
 
-      if (err || saved === undefined) saved = {};
+      if (saved === undefined) saved = {};
 
       resolve(!err);
 
