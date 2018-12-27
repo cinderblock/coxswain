@@ -190,8 +190,8 @@ async function prepare() {
     return;
   }
 
-  // TODO: Make selectable and load default from GH
-  const branch = 'master';
+  // TODO: Make selectable
+  const branch = repo.default_branch;
 
   runMain(repo, branch);
 }
