@@ -25,11 +25,11 @@ export default function Storage() {
 
       if (err || saved === undefined) saved = {};
 
+      resolve(!err);
+
       if (saved.instanceID === undefined) {
         save({ instanceID: uuidv4() });
       }
-
-      resolve(!err);
     });
   });
 
@@ -38,6 +38,9 @@ export default function Storage() {
   }
 
   async function save(data: StoredData) {
+    // Make sure we've loaded the file before we try to save to it
+    await loaded;
+
     Object.assign(saved, data);
     return util.promisify(fs.writeFile)(backendFile, JSON.stringify(saved));
   }
