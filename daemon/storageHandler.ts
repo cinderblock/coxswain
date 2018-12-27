@@ -15,18 +15,21 @@ export default function Storage() {
 
   let loaded = new Promise(resolve => {
     fs.readFile(backendFile, (err, buff) => {
-      if (err) return resolve(false);
-      try {
-        saved = JSON.parse(buff.toString()) as StoredData;
-      } catch (e) {
-        saved = {};
+      if (!err) {
+        try {
+          saved = JSON.parse(buff.toString()) as StoredData;
+        } catch (e) {
+          err = e;
+        }
       }
+
+      if (err || saved === undefined) saved = {};
 
       if (saved.instanceID === undefined) {
         save({ instanceID: uuidv4() });
       }
 
-      resolve(true);
+      resolve(!err);
     });
   });
 
