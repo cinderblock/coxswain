@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
 // config
@@ -44,6 +45,14 @@ function notify(index: string, setState: React.Dispatch<React.SetStateAction<any
   };
 }
 
+function useStore<T>(index: string, def: T) {
+  const [value, setValue] = useState<T>(def);
+
+  useEffect(notify(index, setValue), [index]);
+
+  return [value, setValue] as [T, React.Dispatch<React.SetStateAction<T>>];
+}
+
 window.addEventListener('deviceorientation', ({ alpha, beta, gamma }) => {
   if (alpha === null) return;
 
@@ -77,4 +86,4 @@ function eventHandler(name: string, log = true) {
   });
 }
 
-export { socket as default, eventHandler, Store, notify };
+export { socket as default, eventHandler, Store, notify, useStore };

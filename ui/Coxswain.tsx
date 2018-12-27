@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SocketConnection, { eventHandler, notify } from './SocketConnection';
+import SocketConnection, { eventHandler, useStore } from './SocketConnection';
 
 import { Repository } from '../daemon/githubHandler';
 
@@ -17,9 +17,7 @@ function repository(repo: Repository, index: number) {
 }
 
 export default function Coxswain(props: any) {
-  const [repoList, setRepoList] = useState<Repository[]>([]);
-
-  useEffect(notify('repositories', setRepoList));
+  const [repoList, foo] = useStore<Repository[]>('repositories', []);
 
   return <ul>{repoList && repoList.map(repository)}</ul>;
 }
