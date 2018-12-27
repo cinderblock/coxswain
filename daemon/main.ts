@@ -5,10 +5,8 @@ require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 
 import http from 'http';
 import chalk from 'chalk';
-import uuid from 'uuid/v4';
 import ServerStarter from 'server-starter';
 import Koa from 'koa';
-import GithubWebhook from 'koa-github-webhook-secure';
 
 // Local dependencies
 import debug from './utils/debug';
@@ -16,6 +14,8 @@ import makeClientHandler from './ClientUIHandler';
 import Tunnel from './TunnelHandler';
 import Storage from './storageHandler';
 import github, { Repository } from './githubHandler';
+import newConnection from './upstreams/github.com';
+import EndpointManager from './EndpointManager';
 
 const hooks = new Koa();
 
@@ -84,8 +84,8 @@ const remoteControlServer = makeClientHandler(
     // Shut the whole thing down.
     Shutdown,
 
-    token(token: string) {
-      const data = storage.get();
+    async token(token: string) {
+      const data = await storage.data;
       if (!data) return;
       if (!data.upstreams) data.upstreams = [];
 
@@ -104,7 +104,7 @@ const remoteControlServer = makeClientHandler(
     },
 
     async selectRepo(repo: Repository) {
-      const data = storage.get();
+      const data = await storage.data;
       if (!data) return;
       if (!data.upstreams) data.upstreams = [];
 
@@ -133,8 +133,8 @@ const remoteControlServer = makeClientHandler(
       prepare();
     },
   },
-  (sock: SocketIO.Socket) => {
-    const data = storage.get();
+  async (sock: SocketIO.Socket) => {
+    const data = await storage.data;
     sock.emit('authorized', !!(data && data.upstreams && data.upstreams[0] && data.upstreams[0].token));
     sock.emit('repositories', repos);
   }
@@ -155,10 +155,11 @@ function Shutdown() {
 }
 
 const tunnel = Tunnel(hookServerListen);
-tunnel.url().then(debug.variable.bind(0, 'Tunnel URL'));
+const endpoint = EndpointManager(tunnel);
+tunnel.url.then(debug.variable.bind(0, 'Tunnel URL'));
 
 async function prepare() {
-  const data = storage.get();
+  const data = await storage.data;
   if (!data || !data.upstreams || !data.upstreams[0]) return;
 
   const token = data.upstreams[0].token;
@@ -207,72 +208,7 @@ async function prepare() {
     data.upstreams[0].repositories[0].instances[0] = { branch: repo.default_branch };
   }
 
-  runMain();
+  newConnection(data.coxswainID, data.upstreams[0]);
 }
 
-let running = false;
-async function runMain() {
-  if (running) {
-    debug.error('Trying to run twice...');
-    return;
-  }
-  running = true;
-
-  await storage.loaded;
-
-  const data = storage.get();
-  if (
-    !data ||
-    !data.coxswainID ||
-    !data.upstreams ||
-    !data.upstreams[0] ||
-    !data.upstreams[0].token ||
-    !data.upstreams[0].repositories ||
-    !data.upstreams[0].repositories[0] ||
-    !data.upstreams[0].repositories[0].instances ||
-    !data.upstreams[0].repositories[0].instances[0]
-  ) {
-    running = false;
-    return;
-  }
-
-  if (data.upstreams[0].service !== 'github.com') {
-    debug.error('Only github.com is supported currently');
-    running = false;
-    return;
-  }
-
-  const { owner, name } = data.upstreams[0].repositories[0];
-  const { branch, hookID } = data.upstreams[0].repositories[0].instances[0];
-
-  const secret = uuid();
-  const runID = uuid();
-  const base = await tunnel.url();
-
-  const path = ['', '__coxswain', data.coxswainID, tunnel.id, runID].join('/');
-
-  console.log('setting up hook');
-
-  // Create a new hook middleware
-  const githubWebhook = new GithubWebhook({ path, secret });
-
-  // Attach it to Koa hook server
-  hooks.use(githubWebhook.middleware());
-
-  githubWebhook.on('*', console.log);
-
-  // Register hook with github
-  gh.registerHook(owner, name, base + path, secret);
-
-  hooks.use(async ctx => {
-    console.log('test');
-    ctx.body = 'Hello';
-    // TODO: Don't have this hook.use here
-  });
-
-  // TODO: Handle shutdown somehow...
-
-  running = false;
-}
-
-storage.loaded.then(() => prepare());
+storage.data.then(prepare);

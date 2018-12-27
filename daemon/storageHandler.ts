@@ -1,26 +1,11 @@
 import fs from 'fs';
 import util from 'util';
 import uuidv4 from 'uuid/v4';
+import { GithubUpstream } from './upstreams/github.com';
 
 const backendFile = 'data.json';
 
 type uuid = string;
-
-type GithubUpstream = {
-  service: 'github.com';
-  // Most services require some key to access hook configuration
-  token?: string;
-  // List of repositories we're managing (on this upstream)
-  repositories?: {
-    owner: string;
-    name: string;
-    instances?: {
-      branch: string;
-      // host hook id. To easily reuse old hooks
-      hookID?: string;
-    }[];
-  }[];
-};
 
 type StoredData = {
   // UUID identifying this instance of coxswain
@@ -30,11 +15,18 @@ type StoredData = {
   upstreams?: GithubUpstream[];
 };
 
-export default function Storage() {
-  let saved: StoredData | undefined;
+type AvailableData = {
+  // UUID identifying this instance of coxswain
+  coxswainID: uuid;
+  // Support more than one upstream
+  // Currently only github supported
+  upstreams?: GithubUpstream[];
+};
 
-  let loaded = new Promise(resolve => {
+export default function Storage() {
+  const data = new Promise<AvailableData>(resolve => {
     fs.readFile(backendFile, (err, buff) => {
+      let saved: StoredData | undefined;
       if (!err) {
         try {
           saved = JSON.parse(buff.toString()) as StoredData;
@@ -43,31 +35,27 @@ export default function Storage() {
         }
       }
 
+      let needsSave = false;
+
       if (saved === undefined) saved = {};
 
-      resolve(!err);
-
       if (saved.coxswainID === undefined) {
-        saved.coxswainID = uuidv4();
-        save();
+        saved.coxswainID = uuidv4() as uuid;
+        needsSave = true;
       }
+
+      resolve(saved as AvailableData);
+
+      if (needsSave) save();
     });
   });
 
-  function get() {
-    return saved;
-  }
-
   async function save() {
-    // Make sure we've loaded the file before we try to save to it
-    await loaded;
-
-    return util.promisify(fs.writeFile)(backendFile, JSON.stringify(saved));
+    return util.promisify(fs.writeFile)(backendFile, JSON.stringify(await data));
   }
 
   return {
-    get,
+    data,
     save,
-    loaded,
   };
 }
