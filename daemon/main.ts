@@ -238,6 +238,7 @@ async function runMain() {
 
   if (data.upstreams[0].service !== 'github.com') {
     debug.error('Only github.com is supported currently');
+    running = false;
     return;
   }
 
