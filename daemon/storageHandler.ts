@@ -4,10 +4,30 @@ import uuidv4 from 'uuid/v4';
 
 const backendFile = 'data.json';
 
-type StoredData = {
+type uuid = string;
+
+type GithubUpstream = {
+  service: 'github.com';
+  // Most services require some key to access hook configuration
   token?: string;
-  repository?: string;
-  instanceID?: string;
+  // List of repositories we're managing (on this upstream)
+  repositories?: {
+    owner: string;
+    name: string;
+    instances?: {
+      branch: string;
+      // host hook id. To easily reuse old hooks
+      hookID?: string;
+    }[];
+  }[];
+};
+
+type StoredData = {
+  // UUID identifying this instance of coxswain
+  coxswainID?: uuid;
+  // Support more than one upstream
+  // Currently only github supported
+  upstreams?: GithubUpstream[];
 };
 
 export default function Storage() {
@@ -27,8 +47,9 @@ export default function Storage() {
 
       resolve(!err);
 
-      if (saved.instanceID === undefined) {
-        save({ instanceID: uuidv4() });
+      if (saved.coxswainID === undefined) {
+        saved.coxswainID = uuidv4();
+        save();
       }
     });
   });
@@ -37,11 +58,10 @@ export default function Storage() {
     return saved;
   }
 
-  async function save(data: StoredData) {
+  async function save() {
     // Make sure we've loaded the file before we try to save to it
     await loaded;
 
-    Object.assign(saved, data);
     return util.promisify(fs.writeFile)(backendFile, JSON.stringify(saved));
   }
 

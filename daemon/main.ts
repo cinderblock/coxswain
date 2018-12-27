@@ -85,23 +85,46 @@ const remoteControlServer = makeClientHandler(
     Shutdown,
 
     token(token: string) {
+      const data = storage.get();
+      if (!data) return;
+      if (!data.upstreams) data.upstreams = [];
+
+      if (!data.upstreams[0]) data.upstreams[0] = { service: 'github.com', token };
+
+      if (data.upstreams[0].service !== 'github.com') throw Error('Only github supported');
+
+      data.upstreams[0].token = token;
+
       storage
-        .save({ token })
-        .then(() => {
-          debug.info('Token saved');
-        })
+        .save()
+        .then(debug.info.bind(0, 'Token saved'))
         .catch(debug.error.bind(0, 'Failed to save:'));
 
       prepare();
     },
 
     async selectRepo(repo: Repository) {
-      const repository = `github.com/${repo.owner.login}/${repo.name}`;
+      const data = storage.get();
+      if (!data) return;
+      if (!data.upstreams) data.upstreams = [];
 
-      debug.info('Selected repo:', repository);
+      if (!data.upstreams[0]) throw Error('no upstreams configured');
+
+      const upstream = data.upstreams[0];
+
+      if (upstream.service !== 'github.com') throw Error('Only github supported');
+
+      if (!upstream.repositories) upstream.repositories = [];
+
+      const owner = repo.owner.login;
+      const name = repo.name;
+
+      if (!upstream.repositories[0]) upstream.repositories[0] = { owner, name };
+
+      debug.info('Selected repo:', owner, name);
 
       storage
-        .save({ repository })
+        .save()
         .then(() => {
           debug.info('Repository selection saved');
         })
@@ -112,7 +135,7 @@ const remoteControlServer = makeClientHandler(
   },
   (sock: SocketIO.Socket) => {
     const data = storage.get();
-    sock.emit('authorized', !!(data && data.token));
+    sock.emit('authorized', !!(data && data.upstreams && data.upstreams[0] && data.upstreams[0].token));
     sock.emit('repositories', repos);
   }
 );
@@ -136,9 +159,9 @@ tunnel.url().then(debug.variable.bind(0, 'Tunnel URL'));
 
 async function prepare() {
   const data = storage.get();
-  if (!data) return;
+  if (!data || !data.upstreams || !data.upstreams[0]) return;
 
-  const token = data.token;
+  const token = data.upstreams[0].token;
 
   if (!token) {
     debug.notice('No token!');
@@ -154,7 +177,8 @@ async function prepare() {
   if (!repos) {
     remoteControlServer.emitAll('authorized', false);
     debug.error('Authorization failed');
-    storage.save({ token: undefined });
+    data.upstreams[0].token = undefined;
+    storage.save();
     return;
   }
 
@@ -162,26 +186,12 @@ async function prepare() {
 
   remoteControlServer.emitAll('repositories', repos);
 
-  const repository = data.repository;
-
-  if (!repository) {
+  if (!data.upstreams[0].repositories || !data.upstreams[0].repositories[0]) {
     debug.notice('No repository selected!');
     return;
   }
 
-  const res = parseRepositoryString(repository);
-
-  if (!res) {
-    debug.error('Bad repository format:', repository);
-    return;
-  }
-
-  const { host, owner, name } = res;
-
-  if (host !== 'github.com') {
-    debug.error('Only github.com is supported currently');
-    return;
-  }
+  const { owner, name } = data.upstreams[0].repositories[0];
 
   const repo = repos.find(r => r.owner.login === owner && r.name === name);
 
@@ -190,26 +200,18 @@ async function prepare() {
     return;
   }
 
-  // TODO: Make selectable
-  const branch = repo.default_branch;
+  if (!data.upstreams[0].repositories[0].instances) data.upstreams[0].repositories[0].instances = [];
 
-  runMain(repo, branch);
-}
-
-function parseRepositoryString(repository: string) {
-  const res = repository.match(/^(?<host>[^/]+)\/(?<owner>[^/]+)\/(?<name>[^/]+)$/);
-
-  if (!res) {
-    return false;
+  if (!data.upstreams[0].repositories[0].instances[0]) {
+    // TODO: Make selectable
+    data.upstreams[0].repositories[0].instances[0] = { branch: repo.default_branch };
   }
 
-  console.log(res);
-
-  return res.groups as { host: string; owner: string; name: string };
+  runMain();
 }
 
 let running = false;
-async function runMain(repo: Repository, branch?: string) {
+async function runMain() {
   if (running) {
     debug.error('Trying to run twice...');
     return;
@@ -219,31 +221,34 @@ async function runMain(repo: Repository, branch?: string) {
   await storage.loaded;
 
   const data = storage.get();
-  if (!data || !data.instanceID || !data.repository || !data.token) {
+  if (
+    !data ||
+    !data.coxswainID ||
+    !data.upstreams ||
+    !data.upstreams[0] ||
+    !data.upstreams[0].token ||
+    !data.upstreams[0].repositories ||
+    !data.upstreams[0].repositories[0] ||
+    !data.upstreams[0].repositories[0].instances ||
+    !data.upstreams[0].repositories[0].instances[0]
+  ) {
     running = false;
     return;
   }
 
-  const res = parseRepositoryString(data.repository);
-
-  if (!res) {
-    debug.error('Bad repository format:', data.repository);
-    running = false;
-    return;
-  }
-
-  const { host, owner, name } = res;
-
-  if (host !== 'github.com') {
+  if (data.upstreams[0].service !== 'github.com') {
     debug.error('Only github.com is supported currently');
     return;
   }
+
+  const { owner, name } = data.upstreams[0].repositories[0];
+  const { branch, hookID } = data.upstreams[0].repositories[0].instances[0];
 
   const secret = uuid();
   const runID = uuid();
   const base = await tunnel.url();
 
-  const path = ['', '__coxswain', data.instanceID, tunnel.id, runID].join('/');
+  const path = ['', '__coxswain', data.coxswainID, tunnel.id, runID].join('/');
 
   console.log('setting up hook');
 
