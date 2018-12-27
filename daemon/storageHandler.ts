@@ -1,6 +1,6 @@
 import fs from 'fs';
 import util from 'util';
-import uuid from 'uuid/v4';
+import uuidv4 from 'uuid/v4';
 
 const backendFile = 'data.json';
 
@@ -23,7 +23,7 @@ export default function Storage() {
       }
 
       if (saved.instanceID === undefined) {
-        save({ instanceID: uuid() });
+        save({ instanceID: uuidv4() });
       }
 
       resolve(true);
