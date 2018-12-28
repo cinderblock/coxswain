@@ -35,6 +35,8 @@ All of these are run from the top level directory.
 
 ![Program flow diagram](Program%20Flow%20Diagram.drawio.png)
 
+_Use [draw.io](https://draw.io) to edit this diagram. [Desktop Clients](https://about.draw.io/integrations/#integrations_offline)_
+
 ### Prerequisites
 
 [**Node 10+**](https://nodejs.org/en/download) must be installed on your development system.
