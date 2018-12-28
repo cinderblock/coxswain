@@ -18,9 +18,9 @@ export type GithubUpstream = {
     name: string;
     instances?: {
       branch: string;
-      // github hook id. To easily reuse old hooks
-      hookID?: string;
     }[];
+    // github hook id. To easily reuse old hooks
+    hookID?: string;
   }[];
 };
 
