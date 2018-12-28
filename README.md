@@ -37,7 +37,7 @@ All of these are run from the top level directory.
 
 ### Prerequisites
 
-[**Node 8+**](https://nodejs.org/en/download) must be installed on your development system.
+[**Node 10+**](https://nodejs.org/en/download) must be installed on your development system.
 
 ```bash
 npm install
