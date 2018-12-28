@@ -208,7 +208,7 @@ async function prepare() {
     data.upstreams[0].repositories[0].instances[0] = { branch: repo.default_branch };
   }
 
-  newConnection(data.coxswainID, data.upstreams[0]);
+  newConnection(, data.upstreams[0]);
 }
 
 storage.data.then(prepare);
