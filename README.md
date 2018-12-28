@@ -31,6 +31,10 @@ All of these are run from the top level directory.
 | `yarn daemon add some-package` | Add `some-package` to the daemon                             |
 | `yarn ui upgrade`              | Upgrade ui packages to latest version                        |
 
+### Program flow
+
+![Program flow diagram](Program%20Flow%20Diagram.drawio.png)
+
 ### Prerequisites
 
 [**Node 8+**](https://nodejs.org/en/download) must be installed on your development system.
