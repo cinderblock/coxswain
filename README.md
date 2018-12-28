@@ -45,10 +45,3 @@ All of these are run from the top level directory.
 | `yarn ui add some-package`     | Add `some-package` to the ui                                 |
 | `yarn daemon add some-package` | Add `some-package` to the daemon                             |
 | `yarn ui upgrade`              | Upgrade ui packages to latest version                        |
-
-| Remote commands        | Need configuration                                                |
-| ---------------------- | ----------------------------------------------------------------- |
-| `yarn remote upgrade`  | Upgrade daemon packages to latest version using the remote's yarn |
-| `yarn remote kill`     | Kill the daemon on remote                                         |
-| `yarn remote shutdown` | Shutdown the remote system                                        |
-| `yarn remote reboot`   | Reboot the remote system                                          |
