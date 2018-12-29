@@ -45,7 +45,7 @@ function serverStartup(which: string) {
     if (err) {
       console.log(chalk.red(which + ' server error:'), err, info, extra);
     } else {
-      console.log('Listening:', info);
+      console.log(which + ' Listening:', info);
     }
   };
 }
