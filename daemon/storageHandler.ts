@@ -1,7 +1,7 @@
 import fs from 'fs';
 import util from 'util';
 import uuidv4 from 'uuid/v4';
-import { GithubUpstream } from './upstreams/github.com';
+import { UpstreamOptions } from './UpstreamHandler';
 
 const backendFile = 'data.json';
 
@@ -12,7 +12,7 @@ type StoredData = {
   coxswainID?: uuid;
   // Support more than one upstream
   // Currently only github supported
-  upstreams?: GithubUpstream[];
+  upstreams?: { [id: string]: UpstreamOptions };
 };
 
 type AvailableData = {
@@ -20,7 +20,7 @@ type AvailableData = {
   coxswainID: uuid;
   // Support more than one upstream
   // Currently only github supported
-  upstreams?: GithubUpstream[];
+  upstreams?: { [id: string]: UpstreamOptions };
 };
 
 export default function Storage() {
