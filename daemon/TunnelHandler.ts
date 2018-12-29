@@ -24,7 +24,7 @@ export default function Tunnel() {
   function newTunnel(dest: number | string, options: TunnelOptions) {
     if (!options) options = { service: 'ngrok.com' };
 
-    debug.info('new tunnel config');
+    // debug.info('new tunnel config');
     switch (options.service) {
       case 'ngrok.com':
         ngrok(dest, options.options).subscribe(url => obs.next);

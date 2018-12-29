@@ -98,7 +98,6 @@ const endpoint = Endpoint();
 const tunnel = Tunnel();
 
 config.data.tunnel.subscribe(opts => {
-  debug.info('Subscription');
   const server = http.createServer();
   ServerStarter(server, hookServerOptions, serverStartup('Hook'));
   endpoint.attach(server);
@@ -107,7 +106,6 @@ config.data.tunnel.subscribe(opts => {
 });
 
 config.data.webUIOptions.subscribe(opts => {
-  debug.info('Subscription');
   const server = http.createServer();
   ServerStarter(server, clientServerOptions, serverStartup('Client'));
   remoteControlServer.attach(server);
