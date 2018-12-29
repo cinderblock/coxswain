@@ -16,6 +16,7 @@ import Endpoint from './EndpointHandler';
 import { map } from 'rxjs/operators';
 import Upstream from './UpstreamHandler';
 import { URL } from 'url';
+import { AddressInfo } from 'net';
 
 const clientServer = http.createServer();
 const hookServer = http.createServer();
@@ -44,7 +45,7 @@ const hookServerOptions = {
 };
 
 function serverStartup(which: string) {
-  return (err?: Error, info?: string, extra?: string) => {
+  return (err: null | Error | string, info: AddressInfo | string | Error, extra?: Error) => {
     if (err) {
       console.log(chalk.red(which + ' server error:'), err, info, extra);
     } else {
