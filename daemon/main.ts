@@ -107,7 +107,7 @@ config.data.tunnel.subscribe(opts => {
 
 config.data.webUIOptions.subscribe(opts => {
   const server = http.createServer();
-  ServerStarter(server, clientServerOptions, serverStartup('Client'));
+  ServerStarter(server, opts, serverStartup('Client'));
   remoteControlServer.attach(server);
 });
 
