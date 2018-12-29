@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Observable, Observer, Subscriber } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, Subscriber } from 'rxjs';
 import { ServerStarterOptions } from 'server-starter';
 import util from 'util';
 import uuidv4 from 'uuid/v4';
@@ -119,6 +119,8 @@ export default function Config() {
     // Make sure we've loaded data before we save
     await data.coxswainID;
 
+    latestSave.next(saved);
+
     return util.promisify(fs.writeFile)(backendFile, JSON.stringify(saved, null, 2));
   }
 
@@ -126,9 +128,12 @@ export default function Config() {
     // TODO: Send close to all Observed things
   }
 
+  const latestSave = new BehaviorSubject(saved);
+
   return {
     data,
     save,
+    latestSave,
     close,
     newUpstream,
     newTunnel,
