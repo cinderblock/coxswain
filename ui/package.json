@@ -2,7 +2,7 @@
   "name": "ui",
   "scripts": {
     "setup": "yarn install --non-interactive --silent && yarn",
-    "dev": "webpack-dev-server",
+    "dev": "nodemon",
     "build": "webpack"
   },
   "license": "MIT",
@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "chalk": "^2.4.1",
+    "nodemon": "^1.18.9",
     "qrcode-terminal": "^0.12.0"
   }
 }
