@@ -75,6 +75,7 @@ export default function Config() {
     setTunnel.next(saved.tunnel);
 
     if (saved.webUIOptions === undefined) {
+      // TODO: Should this default be set here?
       setUIListen.next({ listen: 9001 });
     } else if (saved.webUIOptions !== false) {
       if (!Array.isArray(saved.webUIOptions)) setUIListen.next(saved.webUIOptions);
