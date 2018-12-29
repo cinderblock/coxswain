@@ -14,7 +14,7 @@ type uuid = string;
 type StoredData = {
   // UUID identifying this instance of coxswain
   coxswainID?: uuid;
-  webUIListen?: ServerStarterOptions | ServerStarterOptions[] | false;
+  webUIOptions?: ServerStarterOptions | ServerStarterOptions[] | false;
   tunnel?: TunnelOptions;
   // Upstreams use their uuid as a key in a map
   upstreams?: { [id: string]: UpstreamOptions };
@@ -22,7 +22,7 @@ type StoredData = {
 
 type RunningData = {
   coxswainID: Promise<uuid>;
-  webUIListen: Observable<ServerStarterOptions>;
+  webUIOptions: Observable<ServerStarterOptions>;
   tunnel: Observable<TunnelOptions>;
   // list of new upstreams
   upstreams: Observable<[uuid, UpstreamOptions]>;
@@ -44,13 +44,13 @@ function useObservable<T>(): [Observable<T>, Observer<T>] {
 
 export default function Config() {
   const [coxswainID, setID] = usePromise<string>();
-  const [webUIListen, setUIListen] = useObservable<ServerStarterOptions>();
+  const [webUIOptions, setUIListen] = useObservable<ServerStarterOptions>();
   const [tunnel, setTunnel] = useObservable<TunnelOptions>();
   const [upstreams, setUpstream] = useObservable<[uuid, UpstreamOptions]>();
 
   const data: RunningData = {
     coxswainID,
-    webUIListen,
+    webUIOptions,
     tunnel,
     upstreams,
   };
@@ -74,11 +74,11 @@ export default function Config() {
     setID(saved.coxswainID);
     setTunnel.next(saved.tunnel);
 
-    if (saved.webUIListen === undefined) {
+    if (saved.webUIOptions === undefined) {
       setUIListen.next({ listen: 9001 });
-    } else if (saved.webUIListen !== false) {
-      if (!Array.isArray(saved.webUIListen)) setUIListen.next(saved.webUIListen);
-      else saved.webUIListen.forEach(setUIListen.next);
+    } else if (saved.webUIOptions !== false) {
+      if (!Array.isArray(saved.webUIOptions)) setUIListen.next(saved.webUIOptions);
+      else saved.webUIOptions.forEach(setUIListen.next);
     }
 
     if (saved.upstreams) {
@@ -103,11 +103,11 @@ export default function Config() {
   }
 
   function newWebUI(config: ServerStarterOptions) {
-    if (!saved.webUIListen) {
-      saved.webUIListen = config;
+    if (!saved.webUIOptions) {
+      saved.webUIOptions = config;
     } else {
-      if (Array.isArray(saved.webUIListen)) saved.webUIListen.push(config);
-      else saved.webUIListen = [saved.webUIListen, config];
+      if (Array.isArray(saved.webUIOptions)) saved.webUIOptions.push(config);
+      else saved.webUIOptions = [saved.webUIOptions, config];
     }
 
     setUIListen.next(config);

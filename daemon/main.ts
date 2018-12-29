@@ -106,7 +106,7 @@ config.data.tunnel.subscribe(opts => {
   tunnel.newTunnel(hookServerListen, opts);
 });
 
-config.data.webUIListen.subscribe(opts => {
+config.data.webUIOptions.subscribe(opts => {
   debug.info('Subscription');
   const server = http.createServer();
   ServerStarter(server, clientServerOptions, serverStartup('Client'));
