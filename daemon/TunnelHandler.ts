@@ -31,8 +31,13 @@ export default function Tunnel() {
     }
   }
 
+  function close() {
+    // TODO: link to running instance
+  }
+
   return {
     url,
+    close,
     newTunnel,
   };
 }

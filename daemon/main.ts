@@ -79,6 +79,7 @@ function Shutdown() {
   setImmediate(() => {
     // Shutdown remote control server
     remoteControlServer.close();
+    config.close();
 
     // Just kill the process in a short time in case we've forgotten to stop something...
     setTimeout(() => {

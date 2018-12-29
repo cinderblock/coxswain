@@ -122,9 +122,14 @@ export default function Config() {
     return util.promisify(fs.writeFile)(backendFile, JSON.stringify(saved, null, 2));
   }
 
+  async function close() {
+    // TODO: Send close to all Observed things
+  }
+
   return {
     data,
     save,
+    close,
     newUpstream,
     newTunnel,
     newWebUI,
