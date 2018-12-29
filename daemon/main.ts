@@ -3,20 +3,19 @@
 // Check if a previous version is running first and kill them if they still are.
 require('./utils/runningProcessChecker.js')('../daemon.pid', 'kill');
 
-import http from 'http';
 import chalk from 'chalk';
-import ServerStarter from 'server-starter';
-
-// Local dependencies
-import debug from './utils/debug';
-import makeClientHandler from './ClientUIHandler';
-import Tunnel from './TunnelHandler';
-import Storage from './StorageHandler';
-import Endpoint from './EndpointHandler';
-import { map } from 'rxjs/operators';
-import Upstream from './UpstreamHandler';
-import { URL } from 'url';
+import http from 'http';
 import { AddressInfo } from 'net';
+import { map } from 'rxjs/operators';
+import ServerStarter from 'server-starter';
+import { URL } from 'url';
+
+import makeClientHandler from './ClientUIHandler';
+import Endpoint from './EndpointHandler';
+import Storage from './StorageHandler';
+import Tunnel from './TunnelHandler';
+import Upstream from './UpstreamHandler';
+import debug from './utils/debug';
 
 const clientServer = http.createServer();
 const hookServer = http.createServer();
