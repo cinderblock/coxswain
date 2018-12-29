@@ -11,10 +11,12 @@ const backendFile = 'data.json';
 
 type uuid = string;
 
+export type WebUIServerOptions = ServerStarterOptions;
+
 type StoredData = {
   // UUID identifying this instance of coxswain
   coxswainID?: uuid;
-  webUIOptions?: ServerStarterOptions | ServerStarterOptions[] | false;
+  webUIOptions?: WebUIServerOptions | WebUIServerOptions[] | false;
   tunnel?: TunnelOptions;
   // Upstreams use their uuid as a key in a map
   upstreams?: { [id: string]: UpstreamOptions };
@@ -22,7 +24,7 @@ type StoredData = {
 
 type RunningData = {
   coxswainID: Promise<uuid>;
-  webUIOptions: Observable<ServerStarterOptions>;
+  webUIOptions: Observable<WebUIServerOptions>;
   tunnel: Observable<TunnelOptions>;
   // list of new upstreams
   upstreams: Observable<[uuid, UpstreamOptions]>;
@@ -44,7 +46,7 @@ function useObservable<T>(): [Observable<T>, Observer<T>] {
 
 export default function Config() {
   const [coxswainID, setID] = usePromise<string>();
-  const [webUIOptions, setUIListen] = useObservable<ServerStarterOptions>();
+  const [webUIOptions, setUIListen] = useObservable<WebUIServerOptions>();
   const [tunnel, setTunnel] = useObservable<TunnelOptions>();
   const [upstreams, setUpstream] = useObservable<[uuid, UpstreamOptions]>();
 
@@ -103,7 +105,7 @@ export default function Config() {
     return save();
   }
 
-  function newWebUI(config: ServerStarterOptions) {
+  function newWebUI(config: WebUIServerOptions) {
     if (!saved.webUIOptions) {
       saved.webUIOptions = config;
     } else {
