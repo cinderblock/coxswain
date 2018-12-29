@@ -14,7 +14,7 @@ import makeClientHandler from './ClientUIHandler';
 import Endpoint from './EndpointHandler';
 import Config from './ConfigHandler';
 import Tunnel from './TunnelHandler';
-import Upstream from './UpstreamHandler';
+import Upstream, { UpstreamOptions } from './UpstreamHandler';
 import debug from './utils/debug';
 
 const clientServerListen = 8000;
@@ -64,6 +64,10 @@ const remoteControlServer = makeClientHandler(
 
     // Shut the whole thing down.
     Shutdown,
+
+    async newUpstream(opts: UpstreamOptions) {
+      config.newUpstream(opts);
+    },
 
     // TODO: Handle events from clients...
   },
