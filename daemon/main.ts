@@ -12,17 +12,14 @@ import { URL } from 'url';
 
 import makeClientHandler from './ClientUIHandler';
 import Endpoint from './EndpointHandler';
-import Storage from './StorageHandler';
+import Storage from './ConfigHandler';
 import Tunnel from './TunnelHandler';
 import Upstream from './UpstreamHandler';
 import debug from './utils/debug';
 
-const clientServer = http.createServer();
-const hookServer = http.createServer();
-
 const clientServerListen = 8000;
-const hookServerListen = 8001;
 
+const hookServerListen = 8001;
 const clientServerOptions = {
   listen: clientServerListen,
   // listen: '/tmp/daemon.sock',
@@ -48,12 +45,12 @@ function serverStartup(which: string) {
     if (err) {
       console.log(chalk.red(which + ' server error:'), err, info, extra);
     } else {
-      // console.log('Listening:', info);
+      console.log('Listening:', info);
     }
   };
 }
 
-const storage = Storage();
+const config = Storage();
 
 // Events from the clients and how to handle them
 const remoteControlServer = makeClientHandler(
@@ -71,7 +68,7 @@ const remoteControlServer = makeClientHandler(
     // TODO: Handle events from clients...
   },
   async (sock: SocketIO.Socket) => {
-    const data = await storage.data;
+    const data = await config.data;
     // TODO: Initialize client
     // sock.emit('authorized', !!(data && data.upstreams && data.upstreams[0] && data.upstreams[0].token));
     // sock.emit('repositories', repos);
@@ -92,35 +89,37 @@ function Shutdown() {
   });
 }
 
+const endpoint = Endpoint();
+const tunnel = Tunnel();
 
-async function main() {
-  debug.magenta('Loading...');
-  const data = await storage.data;
+config.data.tunnel.subscribe(opts => {
+  debug.info('Subscription');
+  const server = http.createServer();
+  ServerStarter(server, hookServerOptions, serverStartup('Hook'));
+  endpoint.attach(server);
 
-  debug.variable('Done!', 'Saved data:');
-  console.log(data);
+  tunnel.newTunnel(hookServerListen, opts);
+});
 
-  const tunnel = Tunnel(hookServerListen);
+config.data.webUIListen.subscribe(opts => {
+  debug.info('Subscription');
+  const server = http.createServer();
+  ServerStarter(server, clientServerOptions, serverStartup('Client'));
+  remoteControlServer.attach(server);
+});
 
-  // For debugging
-  tunnel.subscribe(debug.variable.bind(0, 'Tunnel URL'));
+config.data.upstreams.subscribe(async ([upstreamID, upstreamConfig]) => {
+  const coxswainID = await config.data.coxswainID;
 
-  ServerStarter(clientServer, clientServerOptions, serverStartup('Client'));
-  ServerStarter(hookServer, hookServerOptions, serverStartup('Hook'));
+  const hookUrl = tunnel.url.pipe(map(url => [url, '_coxswain', coxswainID, upstreamID].join('/')));
 
-  for (let upstreamID in data.upstreams) {
-    const upstreamConfig = data.upstreams[upstreamID];
+  const upstream = Upstream(upstreamConfig, hookUrl);
 
-    const hookUrl = tunnel.pipe(map(url => [url, '_coxswain', data.coxswainID, upstreamID].join('/')));
+  const hookPath = hookUrl.pipe(map(url => new URL(url).pathname));
 
-    const upstream = Upstream(upstreamConfig, hookUrl);
+  endpoint.registerMiddleware(hookPath, upstream.middleware);
+});
 
-    const hookPath = hookUrl.pipe(map(url => new URL(url).pathname));
-
-    endpoint.registerMiddleware(hookPath, upstream.middleware);
-  }
-}
-
-main()
-  .catch(debug.error)
-  .then(debug.info.bind(0, 'Done with main()'));
+// For debugging
+tunnel.url.subscribe(debug.variable.bind(0, 'Tunnel URL'));
+config.data.coxswainID.then(debug.variable.bind(0, 'Coxswain ID'));
