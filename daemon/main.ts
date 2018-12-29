@@ -57,7 +57,6 @@ const storage = Storage();
 
 // Events from the clients and how to handle them
 const remoteControlServer = makeClientHandler(
-  clientServer,
   {
     // This event happens when mobile devices report their orientation data to the server.
     // This could be very useful as a remote.

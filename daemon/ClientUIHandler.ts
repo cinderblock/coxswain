@@ -5,11 +5,7 @@ import SocketIO from 'socket.io';
 
 let clientID = 0;
 
-export default function makeSocketIOServer(
-  server: http.Server,
-  eventHandlers: { [x: string]: Function },
-  onNewClient?: Function
-) {
+export default function makeSocketIOServer(eventHandlers: { [x: string]: Function }, onNewClient?: Function) {
   // Helper function that is run every time a new webUI connects to us
   function setupClientSocket(sock: SocketIO.Socket) {
     const ID = clientID++;
@@ -47,11 +43,15 @@ export default function makeSocketIOServer(
     if (onNewClient) onNewClient(sock);
   }
 
-  const sock = SocketIO(server, {
+  const sock = SocketIO({
     serveClient: false,
     transports: ['websocket'],
     pingInterval: 1000,
   });
+
+  function attach(server: http.Server) {
+    sock.attach(server);
+  }
 
   // When a new client connects, setup handlers for the possible incoming commands
   sock.on('connection', setupClientSocket);
@@ -67,5 +67,5 @@ export default function makeSocketIOServer(
     sock.sockets.emit(event, ...args);
   }
 
-  return { close: sock.close, on: sock.on, emitAll };
+  return { close: sock.close, on: sock.on, emitAll, attach };
 }
