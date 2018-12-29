@@ -1,23 +1,23 @@
 {
-    "version": "0.1",
-    "language": "en",
-    "words": [
-        "autobind",
-        "cinderblock",
-        "devtool",
-        "favicons",
-        "postpublish",
-        "postversion",
-        "prettierrc",
-        "preversion",
-        "qrcode",
-        "reactstrap",
-        "repo",
-        "shallowequal",
-        "tacklind",
-        "timeago",
-        "ui",
-        "webpacked"
-    ],
-    "flagWords": []
+  "version": "0.1",
+  "language": "en",
+  "words": [
+    "autobind",
+    "cinderblock",
+    "devtool",
+    "favicons",
+    "postpublish",
+    "postversion",
+    "prettierrc",
+    "preversion",
+    "qrcode",
+    "reactstrap",
+    "repo",
+    "shallowequal",
+    "tacklind",
+    "timeago",
+    "ui",
+    "webpacked"
+  ],
+  "flagWords": []
 }
