@@ -96,7 +96,11 @@ function Shutdown() {
 const endpoint = Endpoint(hookServer);
 
 async function main() {
+  debug.magenta('Loading...');
   const data = await storage.data;
+
+  debug.variable('Done!', 'Saved data:');
+  console.log(data);
 
   const tunnel = Tunnel(hookServerListen);
 
