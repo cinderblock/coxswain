@@ -92,7 +92,6 @@ function Shutdown() {
   });
 }
 
-const endpoint = Endpoint(hookServer);
 
 async function main() {
   debug.magenta('Loading...');
