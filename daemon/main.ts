@@ -12,7 +12,7 @@ import { URL } from 'url';
 
 import makeClientHandler from './ClientUIHandler';
 import Endpoint from './EndpointHandler';
-import Storage from './ConfigHandler';
+import Config from './ConfigHandler';
 import Tunnel from './TunnelHandler';
 import Upstream from './UpstreamHandler';
 import debug from './utils/debug';
@@ -50,7 +50,7 @@ function serverStartup(which: string) {
   };
 }
 
-const config = Storage();
+const config = Config();
 
 // Events from the clients and how to handle them
 const remoteControlServer = makeClientHandler(
