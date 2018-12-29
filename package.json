@@ -9,6 +9,9 @@
     "deploy": "cd deploy && yarn",
     "remote": "node ./deploy/remote-yarn.js"
   },
+  "files": [
+    "Program Flow Diagram.drawio.png"
+  ],
   "repository": "git@github.com:cinderblock/coxswain.git",
   "author": "Cameron Tacklind <cameron@tacklind.com>",
   "license": "MIT",
