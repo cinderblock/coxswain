@@ -72,12 +72,16 @@ const remoteControlServer = makeClientHandler(
     // TODO: Handle events from clients...
   },
   async (sock: SocketIO.Socket) => {
-    const data = await config.data;
-    // TODO: Initialize client
-    // sock.emit('authorized', !!(data && data.upstreams && data.upstreams[0] && data.upstreams[0].token));
-    // sock.emit('repositories', repos);
+    const coxswainID = await config.data.coxswainID;
+    sock.emit('coxswainID', coxswainID);
   }
 );
+
+remoteControlServer.linkObservable('tunnel', config.data.tunnel);
+remoteControlServer.linkObservable('webui', config.data.webUIOptions);
+remoteControlServer.linkObservable('upstream', config.data.upstreams);
+
+// TODO: Link each upstream's status...
 
 function Shutdown() {
   setImmediate(() => {
