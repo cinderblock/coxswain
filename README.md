@@ -5,7 +5,8 @@ Daemon to handle deployments from push events.
 Coxswain is a daemon that runs on arbitrary machines and automagically responds to push (or other) events from configured upstreams.
 To bypass firewall issues, coxswain connects to a tunnel service and configures all endpoints to run through it.
 
-For easy configuration, coxswain will also launch a web UI to manage upstream authentication, checkout configurations, and runtime information.
+For easy configuration, coxswain will also launch a web UI to manage configurations, upstream authentication, and runtime information.
+The web UI also provides access to run logs.
 
 Initial support is targeted at github.com as an upstream and using ngrok.com's free tunnel service.
 The code is nominally designed to work with any upstream or tunnel service.
