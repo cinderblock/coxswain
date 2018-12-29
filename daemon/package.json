@@ -28,7 +28,7 @@
     "ngrok": "^3.1.0",
     "node": "^10.14.2",
     "rxjs": "^6.3.3",
-    "server-starter": "^1.4.1",
+    "server-starter": "^1.5.2",
     "socket.io": "^2.1.1",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2",

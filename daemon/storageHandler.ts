@@ -1,6 +1,8 @@
 import fs from 'fs';
+import { ServerStarterOptions } from 'server-starter';
 import util from 'util';
 import uuidv4 from 'uuid/v4';
+
 import { UpstreamOptions } from './UpstreamHandler';
 
 const backendFile = 'data.json';
@@ -10,6 +12,7 @@ type uuid = string;
 type StoredData = {
   // UUID identifying this instance of coxswain
   coxswainID?: uuid;
+  webUIListen?: ServerStarterOptions | false;
   tunnel?: {
     provider: 'ngrok.com';
     options: any;
@@ -22,6 +25,7 @@ type StoredData = {
 type AvailableData = {
   // UUID identifying this instance of coxswain
   coxswainID: uuid;
+  webUIListen?: ServerStarterOptions | false;
   tunnel?: {
     provider: 'ngrok.com';
     options: any;
