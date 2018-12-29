@@ -120,4 +120,6 @@ async function main() {
   }
 }
 
-main();
+main()
+  .catch(debug.error)
+  .then(debug.info.bind(0, 'Done with main()'));
