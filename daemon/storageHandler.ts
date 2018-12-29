@@ -10,6 +10,10 @@ type uuid = string;
 type StoredData = {
   // UUID identifying this instance of coxswain
   coxswainID?: uuid;
+  tunnel?: {
+    provider: 'ngrok.com';
+    options: any;
+  };
   // Support more than one upstream
   // Currently only github supported
   upstreams?: { [id: string]: UpstreamOptions };
@@ -18,6 +22,10 @@ type StoredData = {
 type AvailableData = {
   // UUID identifying this instance of coxswain
   coxswainID: uuid;
+  tunnel?: {
+    provider: 'ngrok.com';
+    options: any;
+  };
   // Support more than one upstream
   // Currently only github supported
   upstreams?: { [id: string]: UpstreamOptions };
