@@ -94,15 +94,18 @@ function Shutdown() {
   });
 }
 
-const tunnel = Tunnel(hookServerListen);
 const endpoint = Endpoint(hookServer);
 
-ServerStarter(clientServer, clientServerOptions, serverStartup('Client'));
-ServerStarter(hookServer, hookServerOptions, serverStartup('Hook'));
-
-async function prepare() {
+async function main() {
   const data = await storage.data;
-  if (!data || !data.upstreams) return;
+
+  const tunnel = Tunnel(hookServerListen);
+
+  // For debugging
+  tunnel.subscribe(debug.variable.bind(0, 'Tunnel URL'));
+
+  ServerStarter(clientServer, clientServerOptions, serverStartup('Client'));
+  ServerStarter(hookServer, hookServerOptions, serverStartup('Hook'));
 
   for (let upstreamID in data.upstreams) {
     const upstreamConfig = data.upstreams[upstreamID];
@@ -117,6 +120,4 @@ async function prepare() {
   }
 }
 
-storage.data.then(prepare);
-
-tunnel.subscribe(debug.variable.bind(0, 'Tunnel URL'));
+main();
