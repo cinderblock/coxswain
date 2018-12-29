@@ -45,7 +45,7 @@ module.exports = {
     proxy: {
       '/socket.io': {
         logLevel: 'silent',
-        target: 'http://localhost:8000',
+        target: 'http://localhost:9001',
         ws: true,
         changeOrigin: true,
       },
