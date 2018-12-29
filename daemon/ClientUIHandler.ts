@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import http from 'http';
 import os from 'os';
+import { Observable } from 'rxjs';
 import SocketIO from 'socket.io';
 
 let clientID = 0;
@@ -41,6 +42,10 @@ export default function makeSocketIOServer(eventHandlers: { [x: string]: Functio
     }, 200);
 
     if (onNewClient) onNewClient(sock);
+
+    for (const event in linkedObservables) {
+      linkedObservables[event].subscribe(v => sock.emit(event, v));
+    }
   }
 
   const sock = SocketIO({
@@ -51,6 +56,13 @@ export default function makeSocketIOServer(eventHandlers: { [x: string]: Functio
 
   function attach(server: http.Server) {
     sock.attach(server);
+  }
+
+  const linkedObservables: { [event: string]: Observable<any> } = {};
+
+  function linkObservable(event: string, o: Observable<any>) {
+    linkedObservables[event] = o;
+    o.subscribe(emitAll.bind(0, event));
   }
 
   // When a new client connects, setup handlers for the possible incoming commands
@@ -67,5 +79,5 @@ export default function makeSocketIOServer(eventHandlers: { [x: string]: Functio
     sock.sockets.emit(event, ...args);
   }
 
-  return { close: sock.close, on: sock.on, emitAll, attach };
+  return { close: sock.close, on: sock.on, emitAll, attach, linkObservable };
 }
